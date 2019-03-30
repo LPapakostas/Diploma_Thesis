@@ -1,0 +1,612 @@
+\section{Ορισμός}
+\justifying
+Υποθέτουμε ένα \en{BSS} (\en{Blind Source Separation}) σύστημα το οποίο περιέχει σήματα από \en n \gr διαφορετικούς αισθητήρες με \en m δείγματα από τον κάθε αισθητήρα. Επίσης, υποθέτουμε ότι ο αριθμός των δειγμάτων \en{m} είναι πολύ μεγαλύτερος από τον αριθμό των αισθητήρων \en{n}, δηλαδή ότι \en{m} $\gg$ \en{n}.
+\\ \\
+Συμβολίζουμε με $x(t) = {\begin{bmatrix} 
+    x_1(t) & x_2(t) & \ldots &  x_n(t)
+    \end{bmatrix}}^T \in \mathbb{R}^{n\times1} $
+το διάνυσμα των σημάτων που λαμβάνουμε από τους αισθητήρες την χρονική στιγμή t, τα οποία και δειγματοληπτούμε με περίοδο δειγματοληψίας $T_s$. Ο πίνακας των σημάτων θα είναι ο $\textbf{X}\in \mathbb{R}^{m\times n}$, με στήλες που αντιστοιχούν στα σήματα του κάθε αισθητήρα και γραμμές που αντιστοιχούν στα δείγματα. Παραδείγματος χάρη, το στοιχείο $x_{ij}$ περιέχει την μέτρηση του i δείγματος για το σήμα που λαμβάνουμε από τον j αισθητήρα. Επίσης, συμβολίζουμε με $\textbf{X}_{k} \in \mathbb{R}^{m\times1}$ το διάνυσμα με όλα τα δείγματα που αντιστοιχούν στον k αισθητήρα και με $x_k \in \mathbb{R}^{n\times1}$ το διάνυσμα που περιέχει τα δείγματα από όλους τους αισθητήρες την $kT_s$ χρονική στιγμή.
+\\
+Άρα ο πίνακας $\textbf{X}$ μπορεί να γραφεί ως εξής:
+\begin{align}\label{eq:4.1.1}
+ \textbf{X} = \begin{bmatrix} 
+                    \mathbf{X}_1 && \mathbf{X}_2 && \ldots && \mathbf{X}_n
+                \end{bmatrix} = \begin{bmatrix} 
+    x_1 && x_2 && \ldots && x_m
+ \end{bmatrix}^T  
+\end{align}
+\\
+Βάσει του μοντέλου \en{BSS}, τα σήματα $x(t)$ αποτελούν γραμμικούς συνδυασμούς κάποιων πηγαίων σημάτων $s(t) = {\begin{bmatrix} 
+    s_1(t) & s_2(t) & \ldots &  s_n(t)
+    \end{bmatrix}}^T \in \mathbb{R}^{n\times1} $ 
+που αντιστοιχούν σε πίνακα δεδομένων $\textbf{S} \in \mathbb{R}^{m\times n}$. Με άλλα λόγια:
+\begin{align}\label{eq:4.1.2}
+ \mathbf{X} = \mathbf{S}\mathbf{B} 
+\end{align}
+ όπου $\mathbf{B} \in \mathbb{R}^{n\times n}$ ένας αντιστρέψιμος πίνακας που ονομάζεται πίνακας μίξης.
+\newpage
+\noindent Βασική υπόθεση για την ανάλυση περιοδικών συνιστωσών είναι πως τα πηγαία σήματα $s(t)$ έχουν κάποια περιοδική δομή. Ο σκοπός μας, μέσω της παραπάνω μεθόδου, είναι η εύρεση ενός διανύσματος συντελεστών βαρύτητας
+$\mathbf{w} = \begin{bmatrix} w_1 && w_2 && \ldots && w_n \end{bmatrix}^T$ που θα δίνει μια προσέγγιση των πηγαίων σημάτων ως γραμμικό συνδυασμό των σημάτων $x(t)$
+$$
+\hat{s}(t) = \mathbf{w}^T x(t)
+$$
+\\ 
+ που στην περίπτωση που έχουμε διακριτά σήματα γράφεται ως:
+ \begin{align}\label{eq:4.1.3}
+     \hat{s} = \begin{bmatrix} \hat{s}_1 \\ \hat{s}_2 \\
+     \vdots \\ \hat{s}_n
+     \end{bmatrix} = \mathbf{X}\mathbf{w} ,
+     \hat{s} \in \mathbb{R}^{m\times 1} \space , \mathbf{w} \in 
+     \mathbb{R}^{n\times 1}
+ \end{align}
+ $$ \\ \hat{s}_i \in \mathbb{R} , i = 1 , 2 , \ldots , n $$
+ τέτοιον ώστε να ελαχιστοποιείται η παρακάτω συνάρτηση κόστους:
+ \begin{align}\label{eq:4.1.4}
+     e(\tau) = \frac {E(\left | \hat{s}(t+\tau) - \hat{s}(t) \right | ^2)} {E(\left | \hat{s}(t) \right | ^2)}
+ \end{align}
+ δηλαδή την μέση τετραγωνική διαφορά του σήματος που θέλουμε να εξάγουμε από το μετατοπισμένο στο χρόνο κατά  $\tau$ σήμα , κανονικοποιημένο ως προς την ισχύ του. 
+ \\ \\ 
+ Το $e(\tau)$ ονομάζεται \textbf{σφάλμα περιοδικότητας} και εκφράζει κατά πόσο ένα σήμα είναι μη περιοδικό, ενώ η μεταβλητή $\tau$ ονομάζεται \textbf{χρονική/δειγματική καθυστέρηση} ή αλλίως \textbf{lag}.
+ \\ \\
+ Με βάση τα παραπάνω, παρατηρούμε ότι όσο μεγαλύτερη τιμή για την μεταβλητή $\tau$ επιλέξουμε , τόσο λιγότερα δείγματα από τα διαθέσιμα μπορούμε να χρησιμοποιήσουμε ώστε να εκτιμήσουμε την έκφραση του αριθμητή της \eqref{eq:4.1.4}. Για $\tau = kT_s$, άρα $\hat{s}_k = \hat{s}(kT_s)$ και με βάση τον ορισμό της αναμενώμενης τιμής ενός διακριτού σήματος (σχέση) % need reference
+ , κατά προσέγγιση λαμβάνουμε ότι:
+ $$
+ Ε(\left | \hat{s}(t+\tau) - \hat{s}(t) \right |^2) = \sum_{i=1}^{m-k}
+ \left | \hat{s}_{i+k} - \hat{s}_i  \right |^2
+$$
+$$
+ E(\left | \hat{s}(t) \right |^2 ) = \sum_{i=1}^{m} \left | \hat{s}_i \right |^2
+ $$
+ \\
+ Με βάση τα παραπάνω , ή \eqref{eq:4.1.4} γίνεται \cite{piCA:12}:
+ \begin{align} \label{eq:4.1.5}
+ e[k] = \frac{\sum\limits_{i=1}^{m-k}
+ \left | \hat{s}_{i+k} - \hat{s}_i  \right |^2}{\sum\limits_{i=1}^{m} \left | \hat{s}_i \right |^2} \geq 0 , i = 1,2,\ldots,m-1
+ \end{align}
+ Όταν η παράμετρος χρονικής καθυστέρησης $k$ λαμβάνει τιμή ίση με την περίοδο του σήματος, η τιμή στον αριθμητή στην \eqref{eq:4.1.5} μηδενίζεται.Επομένως, για να μεγιστοποιήσουμε την περιοδική δομή του σήματος, πρέπει να ελαχιστοποιήσουμε το σφάλμα περιοδικότητας.
+ \\
+Ορίζουμε τους παρακάτω βοηθητικούς πίνακες:
+$$
+ \hat{s}_0[k]=\begin{bmatrix} 
+                \hat{s}_1\\\hat{s}_2\\\vdots\\\hat{s}_{m-k}
+                \end{bmatrix} , 
+ \hat{s}_t[k] = \begin{bmatrix} 
+                \hat{s}_{k+1} \\ \hat{s}_{k+2} \\ \vdots \\ \hat{s}_{m}
+                \end{bmatrix}
+$$
+$$
+ \mathbf{X}_{0}[k] = \begin{bmatrix} 
+                x_{1,1}&x_{1,2}&\ldots&x_{1,n} \\
+                \vdots&\vdots&\vdots&\vdots \\
+                x_{m-k,1}&x_{m-k,2}&\ldots&x_{m-k,n}
+                \end{bmatrix} = 
+                \begin{bmatrix}
+                \mathbf{X}_{01}[k] & \mathbf{X}_{02}[k] & \ldots & 
+                \mathbf{X}_{0n}[k]
+                \end{bmatrix} =
+                \begin{bmatrix}
+                x_1^T \\ x_2^T \\ \vdots \\ x_{m-k}^T
+                \end{bmatrix}
+$$
+$$
+ \mathbf{X}_{t}[k] = \begin{bmatrix} 
+                x_{k+1,1} & x_{K+1,2} & \ldots & x_{K+1,n} \\
+                \vdots & \vdots & \vdots & \vdots \\
+                x_{m,1} & x_{m,2} & \ldots & x_{m,n}
+                \end{bmatrix} = 
+                \begin{bmatrix}
+                \mathbf{X}_{t1}[k] & \mathbf{X}_{t2}[k] & \ldots & 
+                \mathbf{X}_{tn}[k]
+                \end{bmatrix} =
+                \begin{bmatrix}
+                x_{k+1}^T \\ x_{k+2}^T \\ \vdots \\ x_{m}^T
+                \end{bmatrix}
+$$
+$$
+\hat{s}_0[k] \in \mathbb{R}^{(m-k)\times 1} \qquad \hat{s}_t[k] \in \mathbb{R}^{(m-k)\times 1}  
+$$
+$$
+\mathbf{X}_0[k] \in \mathbb{R}^{(m-k)\times n} \qquad \mathbf{X}_t[k] \in \mathbb{R}^{(m-k)\times n}
+$$
+Για τους παραπάνω πίνακες και διανύσματα, για μείωση της πολυπλοκότητας των εξισώσεων, θα παραλείπεται η μεταβλητή $k$, θεωρώντας ότι πάντοτε έχει μια συγκεκριμένη τιμή.
+\\
+Βάσει της \eqref{eq:4.1.2} και κάνοντας χρήση των βοηθητικών πινάκων, έχουμε:
+\begin{align} \label{eq:4.1.6}
+    \hat{s}_0 = \mathbf{X}_0 w \qquad \hat{s}_t = \mathbf{X}_t w
+\end{align}
+και, όπως γνωρίζουμε από την γραμμική άλγεβρα, για οποιοδήποτε διάνυσμα $y \in \mathbb{R}_{n\times 1}$ με στοιχεία $y_i$ ισχύει:
+\begin{align} \label{eq:4.1.7}
+    y^Ty = \sum_{i=1}^{n} y_i^2 = \sum_{i=1}^{n} \left | y_i \right |^2
+\end{align}
+Ξαναγράφουμε την \eqref{eq:4.1.5} χρησιμοποιώντας τις σχέσεις \eqref{eq:4.1.6} και \eqref{eq:4.1.7}:
+\begin{equation*}
+\begin{split}
+e[k] &= \frac{(\hat{s}_t - \hat{s}_0)^T (\hat{s}_t - \hat{s}_0)}{\hat{s}^T \hat{s}} =
+\frac{\hat{s}_t^T \hat{s}_t - \hat{s}_t^T \hat{s}_0 - \hat{s}_0^T \hat{s}_t + \hat{s}_0^T \hat{s}_0} {\hat{s}^T \hat{s}} \\
+&= \frac{w^T\mathbf{X}_t^T\mathbf{X}_t w
+ - w^T\mathbf{X}_t^T\mathbf{X}_0 w
+ - w^T\mathbf{X}_0^T\mathbf{X}_t w
+ + w^T\mathbf{X}_0^T\mathbf{X}_0 w}
+ {w^T\mathbf{X}^T\mathbf{X}w} \Rightarrow \\
+\end{split}
+\end{equation*}
+\begin{align} \label{eq:4.1.8}
+    e(\mathbf{X},w,k) = \frac{w^T(\mathbf{X}_t^T\mathbf{X}_t - \mathbf{X}_t^T\mathbf{X}_0 - \mathbf{X}_0^T\mathbf{X}_t + \mathbf{X}_0^T\mathbf{X}_0)w} {w^T \mathbf{X}^T \mathbf{X} w}
+\end{align}
+Ορίζουμε τους παρακάτω πίνακες μαζί με τους παράγοντες κανονικοποίησης τους:
+\begin{subequations}
+\begin{align} 
+&\mathbf{C} = \frac{1}{m} \mathbf{X}^T \mathbf{X} \quad \mathbf{C} \in \mathbb{R}^{n \times n} \\ \label{eq:4.1.9a}
+&\mathbf{C}_0[k] = \frac{1}{m-k} \mathbf{X}_0^T \mathbf{X}_0 \quad \mathbf{C}_0[k] \in \mathbb{R}^{n\times n} \\ \label{eq:4.1.9b}
+&\mathbf{C}_t[k] = \frac{1}{m-k} \mathbf{X}_t^T \mathbf{X}_t \quad \mathbf{C}_t[k] \in \mathbb{R}^{n\times n} \\\label{eq:4.1.9c}
+&\mathbf{C}_{t0}[k] = \frac{1}{m-k} \mathbf{X}_t^T \mathbf{X}_0 \quad \mathbf{C}_{t0}[k] \in \mathbb{R}^{n\times n} \\ \label{eq:4.1.9d}
+&\mathbf{A}[k] = \frac{1}{m-k}( \mathbf{X}_t^T \mathbf{X}_t - \mathbf{X}_t^T \mathbf{X}_0 - \mathbf{X}_0^T \mathbf{X}_t 
++ \mathbf{X}_0^T \mathbf{X}_0) \notag \\
+& = \mathbf{C}_0[k] + \mathbf{C}_t[k] - ( \mathbf{C}_{t0}[k]+ \mathbf{C}_{t0}^T[k] ) , \quad \mathbf{A}[k] \in \mathbf{R}^{n \times n}
+\end{align} \label{eq:4.1.9e} 
+\end{subequations}
+Βάσει των εξισώσεων \eqref{eq:4.1.9a} - \eqref{eq:4.1.9e}, η \eqref{eq:4.1.8} γίνεται:
+\begin{align} \label{eq:4.1.10}
+    e(\mathbf{X},w,k) = R(\mathbf{A}[k],\mathbf{C},w) = 
+    \frac{w^T\mathbf{A}[k]w} {w^T \mathbf{C} w}
+\end{align}
+Η εξίσωση \eqref{eq:4.1.10} είναι ισοδύναμη με την εξίσωση \eqref{eq:4.1.8} και αποτελεί ένα γενικευμένο κλάσμα Rayleigh. Για σταθερό $k$, συμμετρικό πίνακα $\mathbf{A}$ και θετικά ορισμένο πίνακα $\mathbf{C}$, τότε, όπως αποδείξαμε στο Θεώρημα 1.5, η ελαχιστοποίηση του είναι ισοδύναμη με την εύρεση της μικρότερης γενικευμένης ιδιοτιμής του ζεύγους ($\mathbf{A}[k]$,$\mathbf{C}$), που υπολογίζεται από την σχέση:
+\begin{align} \label{eq:4.1.11}
+    \mathbf{A}[k]w = \lambda \mathbf{C} w
+\end{align}
+\newpage 
+\noindent Η σχέση \eqref{eq:4.1.11} αποκτά την ελάχιστη τιμή της όταν το $w$ είναι το αντίστοιχο γενικευμένο ιδιοδιάνυσμα. Αν $\lambda _1 < \lambda _2 < \ldots < \lambda_n$ είναι οι γενικευμένες ιδιοτιμές, τότε η συνιστώσα που αντιστοιχεί στην ιδιοτιμή $\lambda_1$ είναι αυτή για την οποία μεγιστοποιείται η περιοδική δομή, ενώ η n-οστή ιδιοτιμή θα αντιστοιχεί στην λιγότερο αμιγώς περιοδική συνιστώσα, για μια συγκεκριμένη τιμή του $k$. Οι συνιστώσες δίνονται από τον μετασχηματισμό $\mathbf{\hat{S}} = \mathbf{X}\mathbf{W} $, όπου $\mathbf{W}$ ο πίνακας με στήλες τα γενικευμένα ιδιοδιανύσματα, ταξινομημένα από αυτό που αντιστοιχεί στην μικρότερη ιδιοτιμή στα αριστερά, μέχρι αυτό που αντιστοιχεί στην μεγαλύτερη στα δεξιά.
+\\ \\
+Είναι δυνατόν να έχουμε σημαντικά αποτελέσματα ακόμη και για συνιστώσες πέραν αυτής που αντιστοιχεί στην ελάχιστη ιδιοτιμή, ειδικά για πραγματικά σήματα στα οποία η περιοδικότητα του σήματος δεν είναι σταθερή. Εν γένει, τα πιο ενδιαφέροντα αποτελέσματα για όλες τις συνιστώσες δίνονται εκεί που η \eqref{eq:4.1.10}, για τη μικρότερη ιδιοτιμή, έχει τοπικά ελάχιστα ως προς το k.
+\section{Προτάσεις}
+\justifying
+Σε αυτήν την υποενότητα, ακολουθούν κάποιες προτάσεις όσον αφορά τον αλγόριθμο πCA.
+\subsection*{\small{Πρόταση 4.1}}
+Οι πίνακες $\mathbf{C}$, $\mathbf{C}_0[k]$, $\mathbf{C}_t[k]$ και $\mathbf{A}[k]$ είναι \emph{συμμετρικοί}.
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Από τις σχέσεις \eqref{eq:4.1.9a} - \eqref{eq:4.1.9e}:
+$$
+\mathbf{C}^T = \left ( \frac{1}{m} \mathbf{X}^T \mathbf{X} \right)^T 
+    = \frac{1}{m} \mathbf{X}^T \mathbf{X} = \mathbf{C}
+$$
+Αν αντί για $\mathbf{X}$, έχουμε αντίστοιχα $\mathbf{X}_0$, $\mathbf{X}_t$ και $\mathbf{X}_t - \mathbf{X}_0$ και αντί για $\frac{1}{m}$ έχουμε $\frac{1}{m-k}$, αποδεικνύεται με τον ίδιο τρόπο ότι οι πίνακες $\mathbf{C}_0[k]$, $\mathbf{C}_t[k]$ και $\mathbf{A}[k]$ είναι συμμετρικοί. 
+\\[0.5 \baselineskip]
+\textit{Παρατήρηση}: Ο πίνακας $\mathbf{C}_{t0}[k]$ δεν είναι οπωσδήποτε συμμετρικός.
+\subsection*{\small{Πρόταση 4.2}}
+Οι πίνακες $\mathbf{C}$, $\mathbf{C}_0[k]$, $\mathbf{C}_t[k]$ και $\mathbf{A}[k]$ είναι τουλάχιστον \emph{θετικώς ημιορισμένοι}.
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Παρατηρούμε ότι:
+$$
+w^{Τ} \mathbf{C} w = w^T \left ( \frac{1}{m} \mathbf{X}^T \mathbf{X} \right ) w = \left ( \frac{1}{\sqrt{m}} \mathbf{X} w \right )^T 
+\left ( \frac{1}{\sqrt{m}} \mathbf{X} w \right ) 
+= \left \|  \frac{1}{\sqrt{m}} \mathbf{X} w \right \|^2 \geq 0
+$$
+\newpage
+\noindent Αν αντί για $\mathbf{X}$, έχουμε αντίστοιχα $\mathbf{X}_0$, $\mathbf{X}_t$ και $\mathbf{X}_t - \mathbf{X}_0$ και αντί για $\frac{1}{m}$ έχουμε $\frac{1}{m-k}$, αποδεικνύεται με τον ίδιο τρόπο ότι οι πίνακες $\mathbf{C}_0[k]$, $\mathbf{C}_t[k]$ και $\mathbf{A}[k]$ είναι θετικώς ημιορισμένοι.
+\\ \\
+\textit{Παρατήρηση}: Θεωρώ ότι οι στήλες του $\mathbf{X}$, δηλαδή τα παρατηρούμενα σήματα, είναι γραμμικά ανεξάρτητες. Αναγκαία συνθήκη για να ισχύει αυτό είναι να έχουμε δείγματα τουλάχιστον όσα και τα σήματα, δηλαδή $m \geq n$. Επειδή έχουμε υποθέσει ότι έχουμε πολύ περισσότερα δείγματα από αριθμό καναλιών, είναι στην πράξη αδύνατον να αντιμετωπίσουμε πρόβλημα.
+\\[0.5 \baselineskip]
+Εφόσον είμαστε σίγουροι ότι οι στήλες του πίνακα $\mathbf{X}$ είναι γραμμικά ανεξάρτητες, τότε $\mathbf{X} w \neq 0$, $\forall w \in \mathbb{R}^{n\times 1}$, άρα:
+\begin{align*}
+&\mathbf{X} w \neq 0 \Leftrightarrow \frac {1}{\sqrt{m}} \mathbf{X} w \neq 0 \Leftrightarrow \left \| \frac {1}{\sqrt{m}} \mathbf{X} w \right \| ^2 \neq 0 \\
+&\left ( \frac {1}{\sqrt{m}} \mathbf{X} w \right )^T \left ( \frac {1}{\sqrt{m}} \mathbf{X} w \right ) \neq 0 \Leftrightarrow \\
+& w^T \left ( \frac{1}{m} \mathbf{X}^T \mathbf{X} \right ) w \neq 0
+\Leftrightarrow 
+w^T \mathbf{C} w \neq 0, \forall w \neq 0 \in \mathbb{R}^{n\times 1}
+\end{align*}
+Από την παραπάνω σχέση συμπεραίνουμε ότι ο πίνακας $\mathbf{C}$ είναι
+\emph{θετικά ορισμένος}.
+\subsection*{\small{Πρόταση 4.3}}
+Έστω ότι πολλαπλασιάζεται ο πίνακας δειγμάτων $\mathbf{X}$ από τα δεξιά με έναν οποιονδήποτε αντιστρέψιμο πίνακα $\mathbf{Q} \in \mathbb{R}^{n\times n}$. Τότε οι περιοδικές συνιστώσες που εξάγουμε από τον $\mathbf{X}$, για συγκεκριμένο k, είναι ίσες με αυτές που εξάγουμε από τον $\mathbf{\Tilde{X}} = \mathbf{X}\mathbf{Q}$, πολλαπλασιασμένες με κάποιον διαγώνιο πίνακα μη μηδενικών διαγωνίων στοιχείων (ίδια διεύθυνση, αλλαγή σε μέτρο ή/και πρόσημο), ενώ η συνάρτηση \eqref{eq:4.1.8} παραμένει αμετάβλητη ως προς την παράμετρο $k$.
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Έχουμε $\mathbf{\Tilde{X}} = \mathbf{X} \mathbf{Q}$. Άρα, σύμφωνα με την \eqref{eq:4.1.6} ισχύουν οι σχέσεις $\mathbf{\Tilde{X}}_0 = \mathbf{X}_0 \mathbf{Q}$ και $\mathbf{\Tilde{X}}_t = \mathbf{X}_t \mathbf{Q}$.
+Οπότε, βάσει των \eqref{eq:4.1.9a} και \eqref{eq:4.1.9e}, έχουμε:
+$$
+\mathbf{\Tilde{C}} = \frac{1}{m} \mathbf{\Tilde{X}}^T \mathbf{\Tilde{X}}
+= \frac{1}{m} \left ( \mathbf{X} \mathbf{Q}  \right )^T \left ( \mathbf{X} \mathbf{Q}  \right ) = \mathbf{Q}^T 
+\left ( \frac{1}{m} \mathbf{X}^T \mathbf{X}  \right ) \mathbf{Q} = 
+\mathbf{Q}^T \mathbf{C} \mathbf{Q}
+$$
+\begin{align*}
+\mathbf{\Tilde{A}}[k] &= \frac{1}{m-k} \left ( \mathbf{\Tilde{X}}_t - \mathbf{\Tilde{X}}_0\right )^T \left ( \mathbf{\Tilde{X}}_t - \mathbf{\Tilde{X}}_0\right )  \\
+& = \frac{1}{m-k} \left ( \mathbf{X}_t \mathbf{Q} - \mathbf{X}_0 \mathbf{Q}    \right )^T \left ( \mathbf{X}_t \mathbf{Q} - \mathbf{X}_0 \mathbf{Q}    \right )  \\
+& = \frac{1}{m-k} \left [ \left ( \mathbf{X}_t - \mathbf{X}_0 \right ) \mathbf{Q} \right ]^T \left [ \left ( \mathbf{X}_t - \mathbf{X}_0 \right ) \mathbf{Q} \right ]  \\
+& =\mathbf{Q}^T \left [ \frac{1}{m-k} \left ( \mathbf{X}_t - \mathbf{X}_0\right )^T \left ( \mathbf{X}_t - \mathbf{X}_0\right ) \right ] \mathbf{Q} \\
+&= \mathbf{Q}^T \mathbf{A}[k] \mathbf{Q}
+\end{align*}
+Η εξίσωση για την εύρεση των γενικευμένων ιδιοτιμών του ζεύγους ($\mathbf{\Tilde{A}}[k]$,$\mathbf{\Tilde{C}}$) ώστε να ελαχιστοποιήσουμε το αντίστοιχο κλάσμα Rayleigh είναι:
+$$
+\mathbf{\Tilde{A}}[k] \Tilde{w} = \Tilde{\lambda} \mathbf{\Tilde{C}} \Tilde{w} \Leftrightarrow \mathbf{Q}^T \mathbf{A}[k] \mathbf{Q} \Tilde{w} = \Tilde{\lambda} \mathbf{Q}^T \mathbf{C} \mathbf{Q} \Tilde{w}
+$$
+Εφόσον ο πίνακας $\mathbf{Q}$ είναι αντιστρέψιμος, πολλαπλασιάζουμε από αριστερά με τον ανάστροφο πίνακα του $\mathbf{Q}^{-1}$:
+\begin{align*}
+&\left ( \mathbf{Q}^{-1} \right )^T \mathbf{Q}^T \mathbf{A} \mathbf{Q} \Tilde{w} = \left ( \mathbf{Q}^{-1} \right )^T \Tilde{\lambda} \mathbf{Q}^T \mathbf{C} \mathbf{Q} \Tilde{w} \Leftrightarrow \\
+&\left ( \mathbf{Q}^{-1} \right )^T \mathbf{Q}^T \mathbf{A} \mathbf{Q} \Tilde{w} = \Tilde{\lambda} \left ( \mathbf{Q}^{-1} \right )^T \mathbf{Q}^T \mathbf{C} \mathbf{Q} \Tilde{w} \Leftrightarrow \\
+&\mathbb{I}_n \mathbf{A} \mathbf{Q} \Tilde{w} = \Tilde{\lambda} \mathbb{I}_n \mathbf{C} \mathbf{Q} \Tilde{w} \Leftrightarrow 
+\mathbf{A}\left ( \mathbf{Q} \Tilde{w} \right) = \Tilde{\lambda} \mathbf{C} \left ( \mathbf{Q} \Tilde{w} \right )
+\end{align*}
+Συγκρίνοντας την παραπάνω σχέση με την $\mathbf{A} w = \lambda \mathbf{C} w$, βλέπουμε πως ο μετασχηματισμός των δεδομένων μεταφράζεται σε μετασχηματισμό των γενικευμένων ιδιοδιανυσμάτων του ζεύγους ($\mathbf{A}$,$\mathbf{C}$) για μια συγκεκριμένη τιμή του $k$. Επίσης, παρατηρούμε ότι η τιμή των γενικευμένων ιδιοτιμών διατηρείται όπως και η σειρά των γενικευμένων ιδιοδιανυσμάτων, αν τα ταξινομήσουμε βάσει των ιδιοτιμών τους, όχι όμως και η τιμή τους καθώς υπάρχει κάποια απροσδιοριστία ως προς το μέτρο των ιδιοδιανυσμάτων. Τότε, ισχυεί η σχέση: 
+$$
+\mathbf{W} \mathbf{P} = \mathbf{Q} \mathbf{\Tilde{W}} 
+$$
+όπου $\mathbf{W} \in \mathbb{R}^{n \times n}$ ο πίνακας με στήλες τα γενικευμένα ιδιοδιανύσματα του ζεύγους ($\mathbf{Α}[k]$,$\mathbf{C}$),
+$\mathbf{\Tilde{W}} \in \mathbf{R}^{n \times n}$ ο πίνακας με στήλες τα αντίστοιχα γενικευμένα ιδιοδιανύσματα του ζεύγους ($\mathbf{\Tilde{Α}}[k]$,$\mathbf{\Tilde{C}}$) και $\mathbf{P} \in \mathbb{R}^{n \times n}$ ένας διαγώνιος πίνακας με πραγματικά και μη μηδενικά στοιχεία στην διαγώνιο του. Επειδή ο πίνακας $\mathbf{Q}$ είναι αντιστρέψιμός, ισχύει $\mathbf{\Tilde{W}} = \mathbf{Q}^{-1} \mathbf{W} \mathbf{P}^{-1}$, οι συνιστώσες που λαμβάνουμε από τα δεδομένα $\mathbf{\Tilde{X}} = \mathbf{X} \mathbf{Q}$ θα είναι:
+\begin{align*}
+\mathbf{\Tilde{\hat{S}}} &= \mathbf{\Tilde{X}} \mathbf{\Tilde{W}} = 
+\left ( \mathbf{X} \mathbf{Q} \right ) \left ( \mathbf{Q}^{-1} \mathbf{W} \mathbf{P}^{-1} \right ) = \mathbf{X} \left ( \mathbf{Q} \mathbf{Q}^{-1} \right) \mathbf{W} \mathbf{P}^{-1} \\
+&= \mathbf{X} \mathbb{I}_{n} \mathbf{W} \mathbf{P}^{-1} = \mathbf{X} \mathbf{W} \mathbf{P}^{-1} = \mathbf{\hat{S}} \mathbf{P}^{-1}
+\end{align*}
+Τέλος, βλέπουμε πως η εξίσωση \eqref{eq:4.1.10} παραμένει αμετάβλητη ως προς την μεταβλητή $k$:
+\begin{align*}
+&e \left ( \mathbf{\Tilde{X}} , \Tilde{w}, k \right ) = e \left ( \mathbf{X} \mathbf{Q}, \Tilde{w}, k \right ) = R \left ( \mathbf{\Tilde{A}}[k], \mathbf{\Tilde{C}}, \Tilde{w} \right) =
+R \left ( \mathbf{Q}^T \mathbf{A}[k] \mathbf{Q}, \mathbf{Q}^T \mathbf{C} \mathbf{Q}, \Tilde{w} \right ) \\
+&= R \left ( \mathbf{A}[k], \mathbf{C}, \mathbf{Q} \Tilde{w} \right ) = e \left ( \mathbf{X}, \mathbf{Q} \Tilde{w}, k \right )
+\end{align*}
+\\ 
+\textit{Παρατήρηση}: Σύμφωνα με τα παραπάνω, πολλαπλασιάζοντας τα δεδομένα με μια μη μηδενική πραγματική σταθερά, τότε δεν μεταβάλλεται το τελικό αποτέλεσμα, παρά μόνο πολλαπλασιάζονται τα γενικευμένα ιδιοδιανύσματα με το αντίστροφό αυτής της τιμής. Ομοίως και αν πολλαπλασιάσουμε τους πίνακες $\mathbf{C}_{0}[k]$, $\mathbf{C}_{t}[k]$ και $\mathbf{C}_{t0}[k]$ με οποιαδήποτε πραγματική, θετική σταθερά. Η μόνη διαφορά παραμένει το μέτρο του γενικευμένου ιδιοδιανύσματος και όχι η διεύθυνσή του.
+\newpage
+\subsection*{\small{Πρόταση 4.4}}
+'Εστω $\mathbf{X} = \mathbf{S} \mathbf{B}$, όπου οι στήλες του πίνακα $\mathbf{S}$ είναι γραμμικά ανεξάρτητες, ο πίνακας $\mathbf{B}$ αντιστρέψιμος και ισχύει ότι $s_{j+k_l,l} = s_{j,l}$, δηλαδή η l-οστή στήλη του πίνακα $\mathbf{S}$ είναι περιοδικό σήμα με περίοδο $k_l \leq m-k$. Επιπλέον, υποθέτουμε ότι είναι το μοναδικό με περίοδο $k_l$, ενώ τα υπόλοιπα έχουν διαφορετική περίοδο, γραμμικά ανεξάρτητη της περιόδου $k_l$ ή είναι απεριοδικά, δηλαδή ισχύει ότι $s_{j+(k_l/n_l),i} \neq s_{i,j}, i \neq l, n_l \in \mathbb{N}^* $. Τότε, για $k = k_l$, το διάνυσμα που ελαχιστοποιεί την \eqref{eq:4.1.10} είναι μοναδικό και η περιοδική συνιστώσα που δίνει η l-οστή στήλη του πίνακα $S$ πολλαπλασιασμένη με μια αυθαίρετη μη μηδενική πραγματική σταθερά, δηλαδή $\hat{s} = \mathbf{X} w = p \mathbf{S}_l, p \in \mathbb{R}^*$.
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Επειδή ο πίνακας $\mathbf{B}$ είναι αντιστρέψιμος, ισχύει ότι $\mathbf{S} = \mathbf{X} \mathbf{B}^{-1}$. Οπότε έχουμε $\hat{s} = \mathbf{X} w = \mathbf{S} \Tilde{w}$, όπου $ w = \mathbf{B}^{-1} \Tilde{w}$. Έστω $s_{i,j}$ το στοιχείο του πίνακα $\mathbf{S}$ στην $i$ γραμμή και στην $j$ στήλη και ορίζουμε τον πίνακα $\Delta\mathbf{S} = \mathbf{S}_t[k_l] - \mathbf{S}_0[k_l]$:
+\begin{align*}
+\Delta\mathbf{S} &= \mathbf{S}_t[k_l] - \mathbf{S}_0[k_l] \\
+&= \begin{bmatrix}
+    s_{k_l+1,1} & \ldots & s_{k_l+1,l} & \ldots & s_{k_l+1,n} \\
+    \vdots & \vdots & \vdots & \vdots & \vdots \\
+    s_{m,1} & \ldots & s_{m,l} & \ldots & s_{m,n}
+    \end{bmatrix} -
+    \begin{bmatrix}
+    s_{1,1} & \ldots & s_{1,l} & \ldots & s_{1,n} \\
+    \vdots & \vdots & \vdots & \vdots & \vdots \\
+    s_{m-k_l,1} & \ldots & s_{m-k_l,l} & \ldots & s_{m-k_l,n}
+    \end{bmatrix} \\
+&= \begin{bmatrix}
+    s_{k_l+1,1}-s_{1,1} & \ldots & s_{k_l+1,l}-s_{1,l} & \ldots & s_{k_l+1,n}-s_{1,n} \\
+    \vdots & \vdots & \vdots & \vdots & \vdots \\
+    s_{m,1}-s_{m-k_l,1} & \ldots & s_{m,l}-s_{m-k_l,l} & \ldots & s_{m,n}-s_{m-k_l,n}
+    \end{bmatrix}
+\end{align*}
+Επειδή ισχύει $s_{j+k_l,l} = s_{j,l}$, αντικαθιστούμε την στήλη $l$ με μηδενικά. Άρα:
+\begin{align*}
+\Delta \mathbf{S} &=
+    \begin{bmatrix}
+    s_{k_l+1,1}-s_{1,1} & s_{k_l+1,2}-s_{1,2} & \ldots & 0 & \ldots & s_{k_l+1,n}-s_{1,n} \\
+    \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+    s_{m,1}-s_{m-k_l,1} & s_{m,2}-s_{m-k_l,2} & \ldots & 0 & \ldots & s_{m,n}-s_{m-k_l,n}
+    \end{bmatrix} \\
+&= \begin{bmatrix}
+\Delta \mathbf{S}_1 & \Delta \mathbf{S}_2 & \ldots & 0 & \ldots & 
+\Delta \mathbf{S}_n
+\end{bmatrix}
+\end{align*}
+\begin{align*}
+\Delta \mathbf{S}_j = \begin{bmatrix}
+s_{k_l+1,j} - s_{1,j} \\
+\vdots \\
+s_{m,j}-s_{m-k_l,j}
+\end{bmatrix}
+ j=1,\ldots,n , j \neq l , \Delta\mathbf{S}_j \in \mathbb{R}^{(m-k_l)\times n}
+\end{align*}
+με $\Delta \mathbf{S}_l = 0$. \\
+Ο πίνακας $A_s[k_l]$ γίνεται:
+\begin{align*}
+A_s[k_l] &= \frac{1}{m-k} 
+\begin{bmatrix}
+\Delta \mathbf{S}_1 & \ldots & 0 &\ldots & \Delta \mathbf{S}_n
+\end{bmatrix}^T 
+\begin{bmatrix}
+\Delta \mathbf{S}_1 & \ldots & 0 &\ldots & \Delta \mathbf{S}_n
+\end{bmatrix} \\
+&= \frac{1}{m-k}
+\begin{bmatrix}
+\Delta \mathbf{S}_1^T \Delta \mathbf{S}_1 & \ldots & \Delta \mathbf{S}_1^T \Delta\mathbf{S}_{l-1} & 0 & \Delta \mathbf{S}_1^T \Delta\mathbf{S}_{l+1} & \ldots & \Delta \mathbf{S}_1^T \Delta\mathbf{S}_{n} \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+\Delta \mathbf{S}_{l-1}^T \Delta \mathbf{S}_1 & \ldots & \Delta \mathbf{S}_{l-1}^T \Delta\mathbf{S}_{l-1} & 0 & \Delta \mathbf{S}_{l-1}^T \Delta\mathbf{S}_{l+1} & \ldots & \Delta \mathbf{S}_{l-1}^T \Delta\mathbf{S}_{n} \\
+0 & \ldots & 0 & 0 & 0 & \ldots & 0 \\
+\Delta \mathbf{S}_{l+1}^T \Delta \mathbf{S}_1 & \ldots & \Delta \mathbf{S}_{l+1}^T \Delta\mathbf{S}_{l-1} & 0 & \Delta \mathbf{S}_{l+1}^T \Delta\mathbf{S}_{l+1} & \ldots & \Delta \mathbf{S}_{l+1}^T \Delta\mathbf{S}_{n} \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+\Delta \mathbf{S}_{n}^T \Delta \mathbf{S}_1 & \ldots & \Delta \mathbf{S}_{n}^T \Delta\mathbf{S}_{l-1} & 0 & \Delta \mathbf{S}_{n}^T \Delta\mathbf{S}_{l+1} & \ldots & \Delta \mathbf{S}_{n}^T \Delta\mathbf{S}_{n}
+\end{bmatrix}
+\end{align*}
+Θέλουμε να βρούμε μια γενικευμένη ιδιοτιμή $\Tilde{\lambda}$ και το αντίστοιχο ιδιοδιάνυσμα $\Tilde{w} \in \mathbb{R}^{n \times 1}$ του ζεύγους ($A_s[k_l]$,$C_k$) από την σχέση:
+$$
+A_s[k_l] \Tilde{w} = \Tilde{\lambda} \mathbf{C}_s \Tilde{w}
+$$
+Έστω ότι $\Tilde{w} = w^* = \begin{bmatrix}
+ 0 & \ldots & p & \ldots & 0
+\end{bmatrix}^T , p \in \mathbb{R}^*$, όπου $p$ είναι το l-οστό στοιχείο του διανύσματος $\Tilde{w}$. Επειδή η l-οστή στήλη του πίνακα $A_s[k_l]$ είναι μηδενική, τότε:
+$$
+A_s[k_l] w^* = 0 \Leftrightarrow \Tilde{\lambda} \mathbf{C}_s w^* = 0
+$$
+Επειδή $\mathbf{C}_s = \mathbf{C}_s[k_l] = \mathbf{S}^T \mathbf{S}$ και βάσει των αρχικών μας υποθέσεων ότι ο πίνακας $\mathbf{S}$ είναι ανεξάρτητες, καταλήγουμε ότι ο πίνακας $\mathbf{C}_s[k_l]$ είναι θετικά ορισμένος. Με άλλα λόγια, ο πίνακας $\mathbf{C}_s[k_l]$ είναι αντιστρέψιμος, άρα συμπεραίνουμε ότι οι στήλες του είναι γραμμικά ανεξάρτητες. Σύμφωνα με τα παραπάνω ισχύει ότι $\mathbf{C}_s x \neq 0, \forall x \neq 0$ και επιπλέον $w^* \neq 0$, αφού $p \neq 0$. Άρα έχουμε $\mathbf{C}_s w^* \neq 0$ και σύμφωνα με την σχέση $\Tilde{\lambda} \mathbf{C}_s w^* \neq 0$, καταλήγουμε ότι πρέπει $\Tilde{\lambda} = 0$. Εν ολίγοις, μια γενικευμένη ιδιοτιμή του ζεύγους ($\mathbf{A}_s[k_l]$,$C_s$) είναι η $\lambda = 0$ με αντίστοιχο γενικευμένο ιδιοδιάνυσμα το $w = w^*$.
+\\ 
+Εάν η συγκεκριμένη ιδιοτιμή έχει αλγεβρική πολλαπλότητα ίση με την μονάδα, τότε το $w^*$ είναι το μοναδικό ιδιοδιάνυσμα που αντιστοιχεί στην ιδιοτιμή $\Tilde{\lambda}$. Οπότε:
+$$
+\Tilde{s} = \mathbf{X} w = \mathbf{S} w^* = 
+\begin{bmatrix}
+\mathbf{S}_1 & \ldots & \mathbf{S}_l & \ldots & \mathbf{S}_n 
+\end{bmatrix} 
+\begin{bmatrix}
+0 & \ldots & p & \ldots & 0
+\end{bmatrix} = p \mathbf{S}_l
+$$
+Ταυτόχρονα, από την σχέση \eqref{eq:4.1.5} έχουμε ότι $e\left ( S,\Tilde{w},k \right ) \geq 0$. Επειδή, η ελάχιστη ιδιοτιμή ισούται με την ελάχιστη τιμή του κλάσματος Rayleigh, σύμφωνα με τα παραπάνω, για $k = k_l$ και για $w = w^*$, η σχέση $e\left ( S,\Tilde{w},k \right )$ έχει ολικό ελάχιστο το 0. Τέλος, λόγω της Πρότασης 4.3, έχουμε $e \left ( \mathbf{S},w^*,k_l \right ) = e \left ( \mathbf{X} \mathbf{B}^{-1}, w^*,k_l \right ) = e \left ( \mathbf{X},\mathbf{B}^{-1}w^*,k_l \right )$, οπότε η τελευταία σχέση έχει ολικό ελάχιστο το 0 για $k=k_l$ και $w = \mathbf{B}^{-1} w^*$.
+\\ \\
+\textit{Παρατήρηση}: Η ίδια συνιστώσα μπορεί να εξαχθεί και για κάθε ακέραιο πολλαπλάσιο της περιόδου, αρκεί αυτό να είναι μικρότερο από τον αριθμό των δειγμάτων. Επιπλέον, αν υπάρχει 2ο σήμα με την ίδια περίοδο ή κάποιο ακέραιο πολλαπλάσιο αυτής, πχ $s_{j+k_l,l'} = s+{j,l'}, l' \neq l$, τότε η αντίστοιχη γραμμή και στήλη του πίνακα $\mathbf{A}_s$ θα είναι και αυτή μηδενική και μπορούμε να βρούμε ένα δεύτερο ιδιοδιάνυσμα για το οποίο η γενικευμένη ιδιοτιμή θα είναι 0 για το ίδιο ή για πολλαπλάσιο του $k$. Με άλλα λόγια, η γενικευμένη ιδιοτιμή θα έχει αλγεβρική πολλαπλότητα ίση με 2 και σαν ιδιοδιάνυσμα τον γραμμικό συνδυασμό δυο γραμμικώς ανεξάρτητων ιδιοδιανυσμάτων, κάτι που ισχύει εάν ο πίνακας $\mathbf{A}$ είναι συμμετρικός και ο πίνακας $\mathbf{C}$ θετικά ορισμένος. Δηλαδή, μετά την αύξουσα ταξινόμηση των ιδιοδιανυσμάτων βάσει των ιδιοτιμών τους, θα έχουμε σαν πρώτες 2 περιοδικές συνιστώσες δύο γραμμικώς ανεξάρτητους γραμμικούς συνδυασμούς των $s_l$ και $s_{l'}$.
+\\[0.5 \baselineskip]
+Μια ακόμα περίπτωση είναι όταν έχουμε δυο περιοδικές πηγές με περιόδους $k_{l_1}, k_{l_2} \in \mathbf{K}$ τέτοιες ώστε να μην είναι η μια ακέραιο πολλαπλάσιο της άλλης, αλλά να υπάρχει $k = n_1 k_{l_1} = n_2 k_{l_2}, k \in \mathbf{K}, n_1, n_2 \in \mathbb{Z}^*$.Παρατηρούμε ότι συμβαίνει το ίδιο αποτέλεσμα με την παραπάνω περίπτωση, δηλαδή η μέθοδος δεν θα μας δώσει οπωσδήποτε το αποτέλεσμα που θέλουμε και δεν θα μπορέσουν να μας εξαχθούν όλες οι πηγές με αυτήν.
+\newpage
+\noindent Γενικότερα, αν έχουμε $n^*$ περιοδικές πηγές, όπου $n^* \leq n$, τότε θέλουμε οι περίοδοι τους να είναι γραμμικά ανεξάρτητες, δηλαδή $n_{l_1} T_{l_1} + n_{l_2} T_{l_2} + \ldots + n_{l_n^{*}} T_{l_n^{*}} = 0$, αν και μόνο αν $n_{l_1} = n_{l_2} = \ldots = n_{l_n^{*}} = 0$ 
+\subsection*{\small{Πρόταση 4.5}}
+Έστω $c_{m} = \frac{\mathbf{X}^T \mathbb{I}_{m}}{m} = \frac{1}{m} 
+\sum\limits_{i=1}^{m} x_i, x_i \in \mathbb{R}^{n \times 1} $ ο μέσος όρος των στηλών του $\mathbf{X}$, καθώς επίσης και $\mathbf{\bar{X}}$, 
+$\mathbf{\bar{X}}_0$ και $\mathbf{\bar{X}}_t$ οι αντίστοιχοι πίνακες έχοντας αφαιρέσει από αυτούς τον μέσο όρο $c_m$ από τα δείγματα. Τότε:
+\begin{align} 
+    \mathbf{\bar{A}}[k] = \mathbf{A}[k] \label{eq:4.2.1} \\
+    \mathbf{\bar{C}} = \mathbf{C} - c_m c_m^T \label{eq:4.2.2}
+\end{align}
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Αφαιρώντας τον μέσο όρο από τους αντίστοιχους πίνακες έχουμε:
+$$
+\mathbf{\bar{X}} = \mathbf{X} - \mathbb{I}_{m} c_m^T
+$$
+$$
+\mathbf{\bar{X}}_0 = \mathbf{X}_0 - \mathbb{I}_{m-k} c_m^T
+$$
+$$
+\mathbf{\bar{X}}_t = \mathbf{X}_t - \mathbb{I}_{m-k} c_m^T
+$$
+Όποτε ο πίνακας $\mathbf{\bar{C}}$:
+\begin{align*}
+\mathbf{\bar{C}} &= \frac{1}{m} \mathbf{\bar{X}}^T \mathbf{\bar{X}} =
+\frac{1}{m} \left ( \mathbf{X} - \mathbf{I}_m c_m^T \right)^T 
+\left ( \mathbf{X} - \mathbf{I}_m c_m^T \right) = 
+\frac{1}{m} \left ( \mathbf{X}^T - c_m \mathbb{I}_m^T \right )
+\left ( \mathbf{X} - \mathbb{I}_m c_m^T  \right ) \\
+& = \frac{1}{m} \left (  \mathbf{X}^T \mathbf{X} - \mathbf{X}^T \mathbb{I}_m c_m^T - c_m \mathbb{I}_m^T \mathbf{X} + c_m \mathbb{I}_m^T \mathbb{I}_m c_m^T  \right ) \\
+&= \frac{1}{m} \mathbf{X}^T \mathbf{X} -
+\left ( \frac{\mathbf{X}^T \mathbb{I}_m}{m} \right ) c_m^T -
+c_m \left ( \frac{\mathbf{X}^T \mathbb{I}_m}{m} \right )^T +
+\frac{1}{m} c_m \left ( \mathbb{I}_m^T \mathbb{I}_m \right ) c_m^T \\
+&= \mathbf{C} - c_m c_m^T - c_m c_m^T - \frac{1}{m} m \left ( c_m  c_m^T \right ) = \mathbf{C} - c_m c_m^T
+\end{align*}
+Όσον αφορά τον πίνακα $\mathbf{A}[k]$, παρατηρούμε ότι:
+$$
+\mathbf{\bar{X}}_t - \mathbf{\bar{X}}_0 = \left ( \mathbf{X}_t - \mathbb{I}_{m-k} c_m^T \right ) - \left ( \mathbf{X}_0 - \mathbb{I}_{m-k} c_m^T \right ) = \mathbf{X}_t - \mathbb{I}_{m-k} c_m^T
+- \mathbf{X}_0 + \mathbb{I}_{m-k} c_m^T = \mathbf{X}_t - \mathbf{X}_0
+$$
+άρα:
+$$
+\mathbf{\bar{A}}[k] = \frac{1}{m-k} \left ( \mathbf{\bar{X}}_t - \mathbf{\bar{X}}_0 \right )^T \left ( \mathbf{\bar{X}}_t - \mathbf{\bar{X}}_0 \right ) = \frac{1}{m-k} \left ( \mathbf{X}_t - \mathbf{X}_0 \right )^T \left ( \mathbf{X}_t - \mathbf{X}_0 \right ) = \mathbf{A}[k]
+$$
+\\
+\textit{Παρατήρηση}: Από την παραπάνω πρόταση βλέπουμε ότι για κάθε ένα $k$ όπου η \eqref{eq:4.1.10} δεν μηδενίζεται, υπάρχει περίπτωση να έχουμε διαφορετικές περιοδικές συνιστώσες αν αφαιρέσουμε τον μέσο όρο από τα δεδομένα μας, από όταν τα αφήσουμε ως έχουν, παρότι διατηρείται η περιοδικότητα ενός σήματος, ακόμα και αν αφαιρέσουμε μια σταθερά από αυτόν. Γενικά, είναι καλό να αφαιρείται, καθώς στην περίπτωση που ο μέσος όρος είναι πολύ μεγάλος, τότε υπάρχει η περίπτωση ορισμένες περιοδικές συνιστώσες να μην γίνονται φανερές ή να χρειαζόμαστε πολύ μεγάλη ακρίβεια για την τιμή του $k$ ώστε να εξάγουμε μια ικανοποιητική περιοδική συνιστώσα.
+% isws valoume foto
+\subsection*{\small{Πρόταση 4.6}}
+Για τους μη-κανονικοποιημένους πίνακες $\mathbf{C}_0$ και $\mathbf{C}_t$ ισχύει ότι:
+\begin{align} 
+&\mathbf{C}_0[k-1] = \mathbf{C}_0[k] + x_{m-k+1} x_{m-k+1}^T \label{eq:4.2.3}\\
+&\mathbf{C}_t[k-1] = \mathbf{C}_t[k] + x_k x_k^T \label{eq:4.2.4}
+\end{align}
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Ισχύει ότι :
+\begin{align*}
+\mathbf{C}_0[k] = \mathbf{X}_0^T[k] \mathbf{X}_0[k] = 
+\begin{bmatrix}
+x_1 & x_2 & \ldots & x_{m-k}
+\end{bmatrix}
+\begin{bmatrix}
+x_1 & x_2 & \ldots & x_{m-k}
+\end{bmatrix}^T = \sum\limits_{i=1}^{m-k} x_i x_i^T
+\end{align*}
+\begin{align*}
+\mathbf{C}_t[k] = \mathbf{X}_t[k]^T \mathbf{X}_t[k] = 
+\begin{bmatrix}
+x_{k+1} & x_{k+2} & \ldots & x_m
+\end{bmatrix}
+\begin{bmatrix}
+x_{k+1} & x_{k+2} & \ldots & x_m
+\end{bmatrix}^T = \sum \limits_{i=k+1}^{m} x_i x_i^T
+\end{align*}
+οπότε:
+\begin{align*}
+\mathbf{C}_0[k-1] &= \sum \limits_{i=1}^{m-(k-1)} x_i x_i^T = 
+\sum \limits_{i=1}^{m-k+1)} x_i x_i^T = \sum \limits_{i=1}^{m-k} x_i x_i^T + x_{m-k+1} x_{m-k+1}^T\\ 
+&= \mathbf{C}_0[k] + x_{m-k+1} x_{m-k+1}^T
+\end{align*}
+\begin{align*}
+\mathbf{C}_t[k-1] = \sum \limits_{i=(k-1)+1}^{m} x_i x_i^T = 
+\sum \limits_{i=k}^{m)} x_i x_i^T = \sum \limits_{i=k+1}^{m} x_i x_i^T + x_{k} x_{k}^T= \mathbf{C}_t[k] + x_{k} x_{k}^T
+\end{align*}
+%%% H protash 4.6 den douleuei
+\subsection*{\small{Πρόταση 4.7}}
+Αν ορίσουμε την αλληλοσυσχέτιση δύο σημάτων $\mathbf{X},\mathbf{Y} \in \mathbb{R}^{m \times 1}$, όπως υπολογίζεται από τα δείγματα τους, ως εξής:
+\begin{align*}
+    \hat{c}_{XY} = \sum \limits_{n=1}^{m-k} x_{n+k} y_n
+\end{align*}
+για συγκεκριμένη δειγματική καθυστέρηση $\mathbf{k}$, τότε ο μη-κανονικοποιημένος πίνακας $\mathbf{C}_{t0}[k]$ έχει για στοιχεία του τις αλληλοσυσχετίσεις μεταξύ των στηλών του πίνακα $\mathbf{Χ}$ για το συγκεκριμένο $k$ και μπορεί να γραφτεί ως:
+\begin{align*}
+    \mathbf{C}_{t0}[k] = 
+    \begin{bmatrix}
+    \hat{c}_{11}[k] & \hat{c}_{12}[k] & \ldots & \hat{c}_{1n}[k] \\
+    \vdots & \vdots & \ldots & \vdots \\
+    \hat{c}_{n1}[k] & \hat{c}_{n2}[k] & \ldots & \hat{c}_{nn}[k]
+    \end{bmatrix}
+\end{align*}
+όπου $ \hat{c}_{ij} = \hat{c}_{\mathbf{X}_{i} \mathbf{X}_{j}}$.
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Για $\mathbf{X} = \mathbf{X}_i$ και $\mathbf{Y} = \mathbf{X}_j$, η αλληλοσυσχέτιση είναι:
+\begin{align*}
+    \hat{c}_{ij}[k] = \hat{c}_{\mathbf{X}_i \mathbf{X}_j} =  
+    \sum \limits_{n=1}^{m-k} x_{n+k,i} x_{n,j}
+\end{align*}
+Βάσει των εξισώσεων \eqref{eq:4.1.9d} και των βοηθητικών πινάκων $\mathbf{X}_0$ και $\mathbf{X}_k$ που ορίσαμε παραπάνω, ο πίνακας $\mathbf{C}_{t0}[k]$ γίνεται:
+\begin{align*}
+    \mathbf{C}_{t0}[k] &= \mathbf{X}_t^T \mathbf{X}_0 = 
+    \begin{bmatrix}
+    \mathbf{X}_{t1} & \mathbf{X}_{t2} & \ldots & \mathbf{X}_{tn}
+    \end{bmatrix}^T
+    \begin{bmatrix}
+    \mathbf{X}_{01} & \mathbf{X}_{02} & \ldots & \mathbf{X}_{0n}
+    \end{bmatrix} \\
+    &= \begin{bmatrix}
+    \mathbf{X}_{t1}^T \mathbf{X}_{01} & \mathbf{X}_{t1}^T\mathbf{X}_{02} & \ldots & \mathbf{X}_{t1}^T \mathbf{X}_{0n} \\
+    \mathbf{X}_{t2}^T \mathbf{X}_{01} & \mathbf{X}_{t2}^T\mathbf{X}_{02} & \ldots & \mathbf{X}_{t2}^T \mathbf{X}_{0n} \\
+    \vdots & \vdots & \ldots & \vdots \\
+    \mathbf{X}_{tn}^T \mathbf{X}_{01} & \mathbf{X}_{tn}^T\mathbf{X}_{02} & \ldots & \mathbf{X}_{tn}^T \mathbf{X}_{0n}
+    \end{bmatrix}
+\end{align*}
+Το (i,j) στοιχείο του πίνακα $\mathbf{C}_{t0}$ θα είναι:
+\begin{align*}
+    &C_{t0}(i,j) = \mathbf{X}_{ti}^T \mathbf{X}_{0j} = 
+    \begin{bmatrix}
+    x_{k+1,i} & x_{k+2,i} & \ldots & x_{m,i}
+    \end{bmatrix}
+    \begin{bmatrix}
+    x_{1,j} \\ x_{2,j} \\ \vdots \\ x_{m-k,j}
+    \end{bmatrix} = \sum \limits_{n=1}^{m-k} x_{n+k,i}x_{n,j} \\
+    &\Leftrightarrow C_{t0}(i,j) = \hat{c}_{ij}[k]
+\end{align*}
+Προφανώς, τα στοιχεία της διαγωνίου του πίνακα $\mathbf{C}_{t0}$ αποτελούν τις αυτοσυσχετίσεις των στηλών του πίνακα $\mathbf{X}$.
+\subsection*{\small{Πρόταση 4.8}}
+Αν τα μικτά σήματα έχουν μηδενική μέση τιμή και εφαρμόσουμε σε αυτά data whitening, τότε το γενικευμένο πρόβλημα ιδιοτιμών για το ζεύγος πινάκων 
+($\mathbf{A}[k]$,$\mathbf{C}$) μετατρέπεται σε πρόβλημα εύρεσης ιδιοτιμών του πίνακα $\mathbf{A}[k]$.
+\subsubsection*{\small{\textit{Απόδειξη}}}
+Ο δειγματικός μέσος όρος του πίνακα συνδιασποράς του $x(t)$ είναι:
+\begin{align*}
+\mathbf{C}_x = \frac{1}{m} \sum \limits_{i=1}^{m} x_i x_i^T = 
+\frac{1}{m} \mathbf{X} \mathbf{X}^T = \mathbf{C}
+\end{align*}
+Αν τον διαγωνοποιήσουμε, τότε $\mathbf{C} = \mathbf{V} \mathbf{D} \mathbf{V}^T$ και τα 'λευκά' σήματα δίνονται ως $\Tilde{X} = \mathbf{X} \mathbf{Q}$, όπου $\mathbf{Q} = \mathbf{V} \mathbf{D}^{-\frac{1}{2}}$. Τότε, ο πίνακας $\mathbf{\Tilde{C}} = \mathbb{I}_n$ και σύμφωνα με την Πρόταση 4.3, έχουμε:
+$$
+e \left ( \mathbf{X},w,k \right ) = e \left ( \mathbf{\Tilde{X}},\Tilde{w},k \right ) = R \left ( \mathbf{\Tilde{A}}[k],\mathbb{I}_n,\Tilde{w} \right ), w = \mathbf{Q} \Tilde{w}
+$$
+Η τελευταία ισότητα δίνει το κλάσμα Rayleigh του ζεύγους ($\mathbf{A}[k]$,$\mathbb{I}_n$), το οποίο ελαχιστοποιείται από το ιδιοδιάνυσμα που αντιστοιχεί στην μικρότερη γενικευμένη ιδιοτιμή του ζεύγους, που υπολογίζεται από την σχέση:
+$$
+\mathbf{\Tilde{A}}[k] \Tilde{w} = \lambda \mathbb{I}_n \Tilde{w} \Leftrightarrow \mathbf{\Tilde{A}}[k] \Tilde{w} = \lambda \Tilde{w}
+$$
+\\ 
+Είναι προφανές ότι οι παραπάνω προτάσεις ισχύουν και όταν οι πίνακες που χρησιμοποιούμε βρίσκονται στην ανάστροφη μορφή τους.
+\section{Μεθοδολογία}
+\justifying
+Η μεθοδολογία που θα ακολουθήσουμε για την υλοποίηση του αλγορίθμου πCA είναι η εξής:
+\begin{itemize}
+    \item Επιλογή κάποιου διαστήματος τιμών $k$, προσέχοντας ότι θα περιέχει τις τιμές των περιόδων που καλούμαστε να βρούμε.
+    \item Αφαίρεση της μέσης τιμής από τα δεδομένα καθώς, σύμφωνα με την Πρόταση 4.5, η αφαίρεση της μέσης τιμής δίνει καλύτερα αποτελέσματα.
+    \item "Λεύκανση" του πίνακα δεδομένων(Data Whitening) καθώς, σύμφωνα με την Πρόταση 4.8, το πρόβλημα εύρεσης γενικευμένων ιδιοτιμών μετατρέπεται σε πρόβλημα εύρεσης απλών ιδιοτιμών.
+    \item Υπολογισμός του πίνακα $\mathbf{A}[k]$ μέσω υπολογισμού των αντίστοιχων πινάκων για κάθε $k$ που ανήκει στο διάστημα τιμών που επιλέξαμε παραπάνω.
+    \item Εύρεση σφάλματος περιοδικότητας, που αντιστοιχεί στις ταξινομημένες από την μικρότερη στην μεγαλύτερη ιδιοτιμές του ζεύγους ($\mathbf{A}[k] , \mathbf{C}$), για κάθε $k$.
+    \item Ελαχιστοποίηση του γενικευμένου κλάσματος Rayleigh για τις τιμές $k$ που επιλέξαμε, που αντιστοιχεί στο ελάχιστο σφάλμα περιοδικότητας για αυτές άρα στην μικρότερη ιδιοτιμή.
+    % isws photo
+    \item Αποθήκευση των παραπάνω ιδιοτιμών και των αντίστοιχων ιδιοδιανυσμάτων.
+    \item Εύρεση των τιμών του $k$ για τις οποίες το ελάχιστο σφάλμα περιοδικότητας έχει τοπικά ελάχιστα, καθώς όταν το $k$ ισούται με την περίοδο ή πολλαπλάσιο κάποιας περιόδου μηδενίζεται.
+    \item Εύρεση των τιμών του $k$ που αντιστοιχούν τις περιόδους των επιμέρους σημάτων, διαγράφοντας τα πολλαπλάσια τους.
+    \item Επισκόπηση των περιοδικών συνιστωσών για τις συγκεκριμένες τιμές του $k$.  
+\end{itemize}
+\section{Αλγόριθμος AMUSE}
+\justifying
+O αλγόριθμος AMUSE (Algorithm for Multiple Signal Extraction) \cite{amuse:13} αναπτύχθηκε για να αντιμετωπίσει την αδυναμία διάφορων BSS μεθόδων που βασίζονται σε στατιστικά μεγέθη 4ης τάξης (κύρτωση) και δεν μπορούν να εξάγουν Γκαουσιανές πηγές. Ο αλγόριθμος αυτός θεωρεί, όπως και ο αλγόριθμος πCA, ότι τα BSS σήματα είναι σήματα που μεταβάλλονται στο χρόνο ή στον χώρο και μπορεί να εξάγει τις επιμέρους συνιστώσες χρησιμοποιώντας στατιστικές 2ης τάξης των σημάτων, συγκεκριμένα τον πίνακα αλληλοσυσχέτισης $\mathbf{C}_{t0}[k]$ \cite{piCA:14}.
+% Multichannel Electrocardiogram Decomposition
+Ο αλγόριθμος έχει ως εξής:
+\begin{itemize}
+    \item Επιλογή κάποιου διαστήματος τιμών $k$, προσέχοντας ότι θα περιέχει τις τιμές των περιόδων που καλούμαστε να βρούμε. 
+    \item Αφαίρεση του μέσου όρου από τα δεδομένα: $\Tilde{x}(t) = x(t) - \mathbf{m}_x$.
+    \item Data Whitening στα δεδομένα με μηδενική μέση τιμή: 
+    $z(t) = \mathbf{D}^{-\frac{1}{2}} \mathbf{V}^T \Tilde{x}(t)$.
+    \item Υπολογισμός του πίνακα $\mathbf{C}_e[k] = \frac{\mathbf{C}_{t0}[k]+\mathbf{C}_{t0}^T[k]} {2} $ για κάθε $k$.
+    \item Διαγωνοποίηση του πίνακα $\mathbf{C}_e$: $\mathbf{C}_e = \mathbf{V}_e \mathbf{D}_e \mathbf{V}_e^T$.
+    \item Εύρεση ιδιοτιμών του ζεύγους ($\mathbf{C}_e[k],\mathbf{C}$) που μεγιστοποιούν το σφάλμα περιοδικότητας για τα $k$.
+    \item Επισκόπηση των συνιστωσών για τα παραπάνω $k$: $\hat{s}(t) = \mathbf{V}_e^T z(t)$. 
+\end{itemize}
+Σύμφωνα με την \cite{piCA:14}, εάν αναπτύξουμε την μέση τετραγωνική διαφορά πριν την εκτιμήσουμε έχουμε:
+\begin{align*}
+&E \left \{ \left | \hat{s}(t+\tau) - \hat{s}(t) \right |^2  \right \} = E \left \{ \left [ \hat{s}(t+\tau)-\hat{s}(t) \right ]^2 \right \} = \\
+&= E \left \{ \left ( w^T \left [ x(t+\tau) - x(t) \right ] \right )^2  \right \} = \\
+& =E \left \{ \left ( w^T \left [ x(t+\tau) - x(t) \right ] \right ) \left ( w^T \left [ x(t+\tau) - x(t) \right ] \right )^T \right \} = \\
+&=E \left \{ \left ( w^T \left [ x(t+\tau) - x(t) \right ] \right ) \left ( \left[ x(t+\tau)-x(t) \right ]^T w \right ) \right \} = \\
+&=E \left \{  w^T \left [ x(t+\tau) - x(t) \right ]   \left[ x(t+\tau)-x(t) \right ]^T w \right \} = \\
+&=w^T E\left \{ \left [ x(t+\tau) - x(t)\right ] \left [ x^T(t+\tau) - x^T(t) \right ]  \right \} w = \\
+&=w^T E \left\{ \left [ x(t+\tau)x^T(t+\tau) - x(t+\tau)x^T(t) - x(t)x^T(t+\tau) + x(t)x^T(t) \right ] \right\}w = \\
+&=w^T \left [ E \left \{x(t+\tau)x^T(t+\tau) \right \} -  E \left \{x(t+\tau)x^T(t) \right \} - E \left \{x(t)x^T(t+\tau) \right \} 
++ E \left \{x(t)x^T(t) \right \} \right] w
+\end{align*}
+Αν εκτιμήσουμε τους πίνακες αυτοσυσχέτισης και ετεροσυσχέτισης που προκύπτουν, τότε:
+$$
+E \left \{ x(t+\tau)x^T(t+\tau) \right\} = E \left \{ x(t)x^T(t) \right\} = \mathbf{C}
+$$
+$$
+E \left \{ x(t+\tau)x^T(t) \right\} = E \left \{ \left [ x(t)x^T(t+\tau) \right ]^T \right\} = \mathbf{C}_{t0}[k]
+$$
+οπότε:
+$$
+E \left \{ \left | \hat{s}(t+\tau) - \hat{s}(t) \right |^2  \right \} = w^T \left [ 2\mathbf{C} - \left ( \mathbf{C}_{t0}[k] + \mathbf{C}^{T}_{t0}[k] \right )  \right ] w
+$$
+Ορίζοντας τον πίνακα:
+\begin{align} \label{eq:2.4.1}
+    \mathbf{C}_e[k] = \frac{\mathbf{C}_{t0}[k] + \mathbf{C}^T_{t0}[k]}{2}
+\end{align}
+η παραπάνω σχέση γίνεται:
+\begin{align*}
+    E \left \{ \left | \hat{s}(t+\tau) - \hat{s}(t) \right |^2  \right \} = 2w^T \left ( \mathbf{C} - \mathbf{C}_e[k]  \right ) w
+\end{align*}
+Άρα, η συνάρτηση κόστους που καλούμαστε να ελαχιστοποιήσουμε είναι:
+\begin{align} \label{eq:2.4.2}
+    &e_{AMUSE} \left ( \mathbf{X},w,k \right) = 
+    \frac{ E \left \{ \left | \hat{s}(t+\tau) - \hat{s}(t) \right |^2 \right \} }{ E \left \{ \hat{s}^2(t) \right \} } = 2 \frac{w^T \left ( \mathbf{C} - \mathbf{C}_e[k] \right )w } { w^T \mathbf{C} w} \Leftrightarrow \notag \\
+    &e_{AMUSE} \left ( \mathbf{X},w,k \right) = 2 \left ( 1 - \frac{w^T \mathbf{C}_e[k] w}{ w^T \mathbf{C}w} \right )
+\end{align}
+Το πρόβλημα εύρεσης ελαχίστου της παραπάνω συνάρτησης για κάποιο $k$ αντικαθίσταται από την εύρεση της μέγιστης γενικευμένης ιδιοτιμής και του αντίστοιχου ιδιοδιανύσματος για το ζεύγος πινάκων ($\mathbf{C}_e[k],\mathbf{C}$). Η μόνη απαίτηση του αλγορίθμου AMUSE είναι ότι οι όλες οι ιδιοτιμές πρέπει να έχουν αλγεβρική πολλαπλότητα ίση με την μονάδα.
+\\[0.5 \baselineskip]
+Ο συνδυασμός του αλγορίθμου AMUSE με τον αλγόριθμο πCA αποτελεί μια "βελτιστοποίηση" όσον αφορά την ταχύτητα εκτέλεσης του αλγορίθμου καθώς μπορούμε να εξάγουμε τις περιοδικές συνιστώσες χωρίς τον υπολογισμό των πινάκων $\mathbf{C}_0[k]$ και $\mathbf{C}_t[k]$ με αποτέλεσμα \emph{μικρότερο υπολογιστικό κόστος}.
+\\[0.5 \baselineskip]
+Ο αλγόριθμος AMUSE  έχει ένα μειονέκτημα όσον αφορά την εύρεση περίπλοκων περιοδικών συνιστωσών καθώς δεν βασίζεται πάνω στην κύρια υπόθεση του αλγορίθμου πCA, ότι όλα τα επιμέρους σήματα είναι περιοδικά.
+\section{Κυκλική πCA}
+\justifying
+Ορίζοντας λίγο διαφορετικά την \eqref{eq:4.1.5} έχουμε:
+\begin{align*}
+    e_{circ}\left (\mathbf{X},w,k\right ) = 
+    \frac{ \sum \limits_{i=1}^{m} \left | \hat{s}_{(k+i)_{m}} - \hat{s}_i \right |^2}{ \sum \limits_{i=1}^{m} \left | \hat{s}_i \right |^2} \geq 0, k = 1,2,\ldots,m-1
+\end{align*}
+όπου $(k+i)_{m}$ είναι το ακέραιο πολλαπλάσιο της διαίρεσης του $k+i$ με το $m$. Δηλαδή:
+\begin{align*}
+    \sum \limits_{i=1}^{m} \left | \hat{s}_{(k+i)_m} -\hat{s}_i \right |^2 = &|\hat{s}_{k+1}-\hat{s}_1|^2 + |\hat{s}_{k+2}-\hat{s}_2|^2 + \ldots + |\hat{s}_{m-1} -\hat{s}_{m-k-1}|^2 \\
+    &+ |\hat{s}_{m}-\hat{s}_{m-k}|^2 + |\hat{s}_1 -\hat{s}_{m-k+1}|^2 + \ldots \\
+    &+ |\hat{s}_{k-1} - \hat{s}_{m-1}|^2 + |\hat{s}_k - \hat{s}_m|^2
+\end{align*}
+\newpage
+\noindent Παρατηρώντας την παραπάνω σχέση, βλέπουμε ότι οι διαφορές παραμένουν ίδιες ως προς την μεταβλητή $k$, οπότε μπορούμε να διαπιστώσουμε ότι οι πίνακες $\mathbf{X}_0 = \mathbf{X}$ και $\mathbf{X}_t = \begin{bmatrix}
+x_{k+1} & \ldots & x_{m-1} & x_{m} & x_1 & \ldots & x_{k}
+\end{bmatrix}$ , άρα οι πίνακες $\mathbf{C}_0 = \mathbf{C}_t = \mathbf{C}$ θα είναι σταθεροί και ανεξάρτητοι της μεταβλητής $k$.
+\\[0.5 \baselineskip]
+Η συγκεκριμένη απλοποίηση βελτιστοποιεί το υπολογιστικό κέρδος καθώς οι υπολογισμοί των πινάκων $\mathbf{C}_0$ και $\mathbf{C}_t$ υπολογίζονται μόνο μια φορά άρα και την ταχύτητα εκτέλεσης του αλγορίθμου.
+\\[0.5 \baselineskip]
+Η υπόθεση για την συγκεκριμένη μέθοδο είναι στο γεγονός ότι τα δεδομένα, εφόσον είναι περιοδικά, θα επαναληφθούν με τον ίδιο ακριβώς τρόπο καθώς μεταβάλλουμε την τιμή της μεταβλητής $k$. Αυτό αποτελεί μειονέκτημα όσο αφορά την εύρεση περιοδικών συνιστωσών για σήματα που εμπεριέχουν θόρυβο και πολύπλοκα σήματα καθώς δεν επαναλαμβάνονται επακριβώς μετά το πέρας της περιόδου, αλλά και σε σήματα με μεγάλη χρονική διάρκεια. Τέλος, για σήματα με λίγα δείγματα, η μέθοδος αυτή αποτελεί την τάχιστη λύση για ικανοποιητικά αποτελέσματα.
+\section{Υλοποίηση}
+\justifying
+Η συνάρτηση που υλοποιεί την παραπάνω μέθοδο είναι η \en \emph{pica.py} \cite{codes:28}. \gr Η συνάρτηση \en \emph{pica.py} \gr δέχεται ως ορίσματα τον πίνακα των δεδομένων \en $\mathbf{X}$, \gr την ελάχιστη και την μέγιστη καθυστέρηση \en \emph{minlag} \gr και \en \emph{maxlag} \gr σε δευτερόλεπτα και την συχνότητα δειγματοληψίας \en \emph{f}. \gr  Επιπλέον, έχει προκαθορισμένες τιμές για τις μεταβλητές \en \emph{preproc} = True \gr για την επιλογή της απαραίτητης προεπεξεργασίας των δεδομένων, \en \emph{norm} = True \gr για την κανονικοποίηση, δηλαδή την διαίρεση των επιμέρους αποτελεσμάτων με την τιμή \en $(samples - k) , k =  minlag, \ldots, maxlag $ \gr, \en \emph{amuse} = False \gr για την υλοποίηση του αλγορίθμου \en AMUSE \gr και \en \emph{circ} = False \gr για την υλοποίηση της κυκλικής π\en CA \gr. Σαν έξοδο επιστρέφει τον πίνακα \en $\mathbf{W}$ \gr ώστε \en $ \mathbf{\hat{S}} = \mathbf{W} \mathbf{X}$ \gr οι εκτιμήσεις των πηγαίων σημάτων.
+\\[0.5 \baselineskip]
+Αφού ελεγχθούν οι μεταβλητές ως προς την ορθότητα τους, αναλόγως με την τιμή της μεταβλητής \en \emph{preproc}, \gr τότε μέσω των συναρτήσεων \en \emph{mean\textunderscore remove.py}, \emph{pca \textunderscore eig.py} \gr και \en \emph{data \textunderscore whitening.py} \gr  αφαιρείτε ο μέσος όρος από τα δεδομένα, υλοποιείται ο αλγόριθμος \en PCA \gr και γίνεται λεύκανση των δεδομένων, όπως αναφέρονται στα προηγούμενα κεφάλαια.
+\\[0.5 \baselineskip]
+Έπειτα από την δημιουργία του πίνακα διακριτών χρονικών καθυστερήσεων \en $k$ , \gr υπολογίζουμε τους πίνακες \en $\mathbf{C} , \mathbf{C}_0[k] , \mathbf{C}_t[k] , \mathbf{C}_{t0}[k]$ \gr και \en $\mathbf{A}[k]$. \gr Οι πίνακες \en $\mathbf{C}_{0}[k]$ \gr και \en $\mathbf{C}_{t}[k]$ \gr υπολογίζονται με την συνάρτηση \en \emph{C0\textunderscore Ct\textunderscore compute.py} \gr με την χρήση αναδρομικής σχέσης της Πρότασης 4.6, καθώς μειώνει τον χρόνο υλοποίησης της μεθόδου.
+\\[0.5 \baselineskip]
+Αντί για τον υπολογισμό του πίνακα \en $\mathbf{C}_{t0}$, \gr θα υπολογίσουμε τον πίνακα
+\begin{align} \label{eq:4.6.1}
+    C_e = \frac{ \mathbf{C}_{t0} + C_{t0}^T}{2}
+\end{align}
+δηλαδή το συμμετρικό μέρος του πίνακα \en $\mathbf{C}_{t0}$, \gr με χρήση του μετασχηματισμού \en FFT. \gr 
+\newpage
+\noindent Σύμφωνα με την Πρόταση 4.7, ο πίνακας \en $\mathbf{C}_{t0}[k]$ \gr περιέχει τις αλληλοσυσχετίσεις του πίνακα \en $\mathbf{X}$, \gr και, όπως είναι γνωστό από την επεξεργασία σημάτων, η αλληλοσυσχέτιση υπολογίζεται με την συνέλιξη του \en $\mathbf{X}_{i}$ \gr με το καθρεφτισμένο ως προς τον άξονα \en $k=0$ \gr \en $\mathbf{X}_{j}$ \gr εάν προσθέθούν τόσα μηδενικά στο τέλος και των δύο σημάτων ώστε να έχουμε \en $2*samples-1$ \gr δείγματα \cite{signals:27}. 
+\\[0.5 \baselineskip]
+Στο πεδίο συχνοτήτων, είναι γνωστό ότι ο υπολογισμός της συνέλιξης μετατρέπεται σε απλό πολλαπλασιασμό. Οπότε αρκεί να υπολογιστούν τα πραγματικά μέρη των μετασχηματισμών \en Fourier \gr μεταξύ των σημάτων \en $\mathbf{X}_{i}$ \gr και \en $\mathbf{X}_{j}^{*}$ \gr, να επιλεχθούν τα $ k \in [minlag,maxlag]$ στοιχεία και τέλος, να υπολογιστεί ο αντίστροφος μετασχηματισμός τους. Με αυτόν τον τρόπο και κάνοντας χρήση της συμμετρίας του πίνακα \en $\mathbf{C}_e$, \gr υπολογίζουμε \en $\frac{n(n+1)}{2}$ \gr στοιχεία αντί για \en $n^2$. \gr Η παραπάνω διαδικασία υλοποιείται με την συνάρτηση \en \emph{Ce\textunderscore compute.py}. \gr
+\\[0.5 \baselineskip]
+Με την συνάρτηση \en \emph{is\textunderscore def.py} \gr ελέγχουμε αν οι άνω πίνακες είναι θετικά ορισμένοι ή θετικά ημιορισμένοι, με βάση την Πρόταση 4.2, χρησιμοποιώντας το κριτήριο \en Sylvester. \gr
+\\[0.5 \baselineskip]
+Η εύρεση των ελάχιστων ιδιοτιμών του κλάσματος \en Rayleigh \gr για κάθε ζεύγος πινάκων \en $\left( \mathbf{A}[k],\mathbf{C} \right)$ \gr
+γίνεται με την συνάρτηση \en \emph{rayleigh\textunderscore minimum.py} \gr και για την εύρεση του ελάχιστου περιοδικού σφάλματος χρησιμοποιείται η \en\emph{min\textunderscore max.py} \gr όπου με την χρήση των μεταβλητών \en \emph{height}, \emph{distance} \gr και \en \emph{width} \gr υπολογίζονται τα τοπικά ελάχιστα ή μέγιστα ανάλογα την μέθοδο. Προαιρετικά, γίνεται η απαλοιφή των πολλαπλασίων \en $k T_s$ \gr από τις βασικές περιόδους.
+\\[0.5 \baselineskip]
+Τέλος, μέσω της συνάρτησης \en \emph{period\textunderscore check\textunderscore correlation.py} \gr ελέγχεται η περίοδος των εξαγώμενων περιοδικών συνιστωσών. Η διαδικασία γίνεται με την χρονική διαφορά ανάμεσα στα τοπικά μέγιστα της αυτοσυσχέτισης κάθε σήματος.
+\\[0.5 \baselineskip]
+Όλοι οι κώδικες βρίσκονται στο Παράρτημα Α.
+
+

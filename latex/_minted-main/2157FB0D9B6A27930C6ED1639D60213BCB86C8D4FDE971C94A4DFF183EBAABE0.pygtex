@@ -1,0 +1,68 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{fft}
+
+\PYG{k}{def} \PYG{n+nf}{compute}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{k}\PYG{p}{,}\PYG{n}{amuse}\PYG{p}{,}\PYG{n}{circ}\PYG{p}{,}\PYG{n}{norm}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    PARAMETERS:}
+\PYG{l+s+sd}{    X(array p,n): Array that contains the mixed signals}
+\PYG{l+s+sd}{    k(list): values from [kmin,k\PYGZus{}max] (minlag,maxlag)}
+\PYG{l+s+sd}{    amuse(boolean): If True , we do AMUSE πCA}
+\PYG{l+s+sd}{    circ(boolean): If True , we do circular πCA}
+\PYG{l+s+sd}{    norm(boolean): If True , we normalize the output by multipling with 1/(samples\PYGZhy{}k)}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    OUTPUTS:}
+\PYG{l+s+sd}{    C(array k,p,n): Ce array }
+\PYG{l+s+sd}{	}
+\PYG{l+s+sd}{    Ce[k] = 0.5*(Ct0[k]+Ct0[k].T)}
+\PYG{l+s+sd}{    We will use Fast Fourier Tranform to compute Ce array}
+\PYG{l+s+sd}{    As we know , the elements of Ct0[k] are the cross\PYGZhy{}corelations between signals of}
+\PYG{l+s+sd}{    X array and we observed that it is the circular convolution of Xi with the }
+\PYG{l+s+sd}{    mirrored X for k = 0 , if we add zeros on both of signals so that we have}
+\PYG{l+s+sd}{    2*(samples)\PYGZhy{}1 samples  }
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+	
+    \PYG{n}{sensors}\PYG{p}{,}\PYG{n}{samples} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape} \PYG{p}{;} \PYG{n}{L} \PYG{o}{=} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{k}\PYG{p}{)}
+   
+    \PYG{k}{def} \PYG{n+nf}{nextpow2}\PYG{p}{(}\PYG{n}{i}\PYG{p}{):}
+        \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{1}
+        \PYG{k}{while} \PYG{p}{(}\PYG{n}{n} \PYG{o}{\PYGZlt{}} \PYG{n}{i}\PYG{p}{):} 
+            \PYG{n}{n} \PYG{o}{*=} \PYG{l+m+mi}{2}
+        \PYG{k}{return} \PYG{n}{n}
+    
+    \PYG{k}{if} \PYG{n}{circ}\PYG{p}{:}
+        \PYG{n}{fft\PYGZus{}samples} \PYG{o}{=} \PYG{n}{samples}
+    \PYG{k}{else}\PYG{p}{:}
+         \PYG{n}{fft\PYGZus{}samples} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{o}{\PYGZca{}}\PYG{n}{nextpow2}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{samples}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+   
+    \PYG{c+c1}{\PYGZsh{} Calculate the FFT of the rows of X array}
+    \PYG{n}{Xf} \PYG{o}{=} \PYG{n}{fft}\PYG{o}{.}\PYG{n}{fft}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{fft\PYGZus{}samples}\PYG{p}{)}
+    \PYG{n}{Xfc} \PYG{o}{=} \PYG{n}{Xf}\PYG{o}{.}\PYG{n}{conj}\PYG{p}{()}
+    
+    \PYG{c+c1}{\PYGZsh{} Calculate the DFT of the cross\PYGZhy{}correlation}
+    \PYG{n}{Cs} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{empty}\PYG{p}{(} \PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{(}\PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{n}{sensors}\PYG{o}{*}\PYG{p}{(}\PYG{n}{sensors}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)),}\PYG{n}{fft\PYGZus{}samples}\PYG{p}{),}\PYG{n}{dtype} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{float64}\PYG{p}{);} \PYG{n}{l} \PYG{o}{=} \PYG{l+m+mi}{0} 
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{sensors}\PYG{p}{):}
+        \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{sensors}\PYG{p}{):}
+            \PYG{c+c1}{\PYGZsh{} Compute F(cij) = Re[F\PYGZob{}Xf(i)\PYGZcb{}*F\PYGZob{}Xfc(j)\PYGZcb{}]}
+            \PYG{n}{Cs}\PYG{p}{[}\PYG{n}{i}\PYG{o}{*}\PYG{p}{(}\PYG{n}{sensors}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{+}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{n}{l}\PYG{p}{,:]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{Xf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,:]}\PYG{o}{*}\PYG{n}{Xfc}\PYG{p}{[}\PYG{n}{j}\PYG{p}{,:])}
+        \PYG{n}{l}\PYG{o}{+=}\PYG{n}{i}
+
+    \PYG{c+c1}{\PYGZsh{} Compute the inverse FFT of cross correlation and keep only those that we need}
+    \PYG{n}{Cs} \PYG{o}{=} \PYG{n}{fft}\PYG{o}{.}\PYG{n}{ifft}\PYG{p}{(}\PYG{n}{Cs}\PYG{p}{)} \PYG{p}{;} \PYG{n}{Cs} \PYG{o}{=} \PYG{n}{Cs}\PYG{p}{[:,:}\PYG{n}{samples}\PYG{p}{]}
+    \PYG{n}{Cs} \PYG{o}{=} \PYG{n}{Cs}\PYG{p}{[:,}\PYG{n}{k}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]:}\PYG{n}{k}\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{n}{Ce} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{L}\PYG{p}{,}\PYG{n}{sensors}\PYG{p}{,}\PYG{n}{sensors}\PYG{p}{)} \PYG{p}{,} \PYG{n}{dtype}\PYG{o}{=}\PYG{n}{np}\PYG{o}{.}\PYG{n}{float64}\PYG{p}{)} \PYG{p}{;} \PYG{n}{m} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{sensors}\PYG{p}{):}
+        \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{sensors}\PYG{p}{):}
+            \PYG{c+c1}{\PYGZsh{} Compute F(cij) = Re[F\PYGZob{}Xf(i)\PYGZcb{}*F\PYGZob{}Xfc(j)\PYGZcb{}]}
+            \PYG{n}{Ce}\PYG{p}{[:,}\PYG{n}{j}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{Cs}\PYG{p}{[}\PYG{n}{i}\PYG{o}{*}\PYG{p}{(}\PYG{n}{sensors}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{+}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{n}{m}\PYG{p}{,:])}
+            \PYG{k}{if} \PYG{o+ow}{not}\PYG{p}{(}\PYG{n}{i}\PYG{o}{==}\PYG{n}{j}\PYG{p}{):}
+                \PYG{n}{Ce}\PYG{p}{[:,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{]} \PYG{o}{=} \PYG{n}{Ce} \PYG{p}{[:,}\PYG{n}{j}\PYG{p}{,}\PYG{n}{i}\PYG{p}{]}
+        \PYG{n}{m}\PYG{o}{+=}\PYG{n}{i}
+        
+    \PYG{k}{if} \PYG{n}{norm}\PYG{p}{:}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{L}\PYG{p}{):}
+            \PYG{n}{Ce}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,:,:]} \PYG{o}{=} \PYG{n}{Ce}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,:,:]} \PYG{o}{/}\PYG{p}{(}\PYG{n}{samples}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{k}\PYG{p}{[}\PYG{n}{i}\PYG{p}{])}
+  
+    \PYG{k}{return} \PYG{n}{Ce}
+\end{Verbatim}

@@ -1,0 +1,53 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{scipy} \PYG{k+kn}{import} \PYG{n}{linalg} \PYG{k}{as} \PYG{n}{la}
+
+\PYG{k}{def} \PYG{n+nf}{is\PYGZus{}def}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{tol}\PYG{o}{=\PYGZhy{}}\PYG{l+m+mi}{5}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{o}{**\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{)):}
+    \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    PARAMETERS:}
+\PYG{l+s+sd}{    X (array p,n): array that will be checked if is positive semi\PYGZhy{}definitive}
+\PYG{l+s+sd}{    tol(float): tolerance of eigvalue that will be considered non\PYGZhy{}negative}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    OUTPUTS:}
+\PYG{l+s+sd}{    True/False(boolean):True if X array is positive definitive. }
+\PYG{l+s+sd}{                        Else , False}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    An array is positive semi\PYGZhy{}definitive if all its eightvalues are non\PYGZhy{}negative.}
+\PYG{l+s+sd}{    We implement Sylvester\PYGZsq{}s criterion in order to deduce if a matrix is definitive}
+\PYG{l+s+sd}{     \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{count} \PYG{o}{=} \PYG{l+m+mi}{0} 
+    \PYG{c+c1}{\PYGZsh{} For 3 dimension arrays }
+    \PYG{k}{if} \PYG{p}{(} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{3}\PYG{p}{):}   
+        \PYG{n}{Max} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{p}{;} \PYG{n}{n\PYGZus{}of\PYGZus{}pos} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{Max}\PYG{p}{):}
+            \PYG{n}{p} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{;}
+            \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n\PYGZus{}of\PYGZus{}pos}\PYG{p}{):}
+                \PYG{n}{size} \PYG{o}{=} \PYG{n}{X}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{,}\PYG{n}{j}\PYG{p}{]}\PYG{o}{.}\PYG{n}{shape}
+                \PYG{k}{if} \PYG{n}{size} \PYG{o}{==} \PYG{p}{():}
+                    \PYG{n}{size} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}
+                \PYG{c+c1}{\PYGZsh{} T is the ixi , i = 1,...,n matrix that we will compute its}
+                \PYG{c+c1}{\PYGZsh{} minor determinant}
+                \PYG{n}{T} \PYG{o}{=} \PYG{p}{(}\PYG{n}{X}\PYG{p}{[}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{,}\PYG{n}{j}\PYG{p}{])}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{n}{size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]))}
+                \PYG{k}{if}\PYG{p}{(} \PYG{n}{la}\PYG{o}{.}\PYG{n}{det}\PYG{p}{(}\PYG{n}{T}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{n}{tol}\PYG{p}{):}
+                    \PYG{n}{p}\PYG{o}{+=}\PYG{l+m+mi}{1}
+            \PYG{k}{if} \PYG{p}{(}\PYG{n}{p} \PYG{o}{==} \PYG{n}{n\PYGZus{}of\PYGZus{}pos}\PYG{p}{):}
+                \PYG{n}{count}\PYG{o}{+=}\PYG{l+m+mi}{1}
+        \PYG{c+c1}{\PYGZsh{} if all minor determinants are positive, then X matrix is positive definite}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n}{count} \PYG{o}{\PYGZgt{}=} \PYG{n}{Max}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}
+            \PYG{k}{return} \PYG{n+nb+bp}{True} 
+        \PYG{k}{return} \PYG{n+nb+bp}{False} 
+    \PYG{k}{else} \PYG{p}{:}
+        \PYG{n}{n\PYGZus{}of\PYGZus{}pos} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}
+        \PYG{k}{for} \PYG{n}{j} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{n\PYGZus{}of\PYGZus{}pos}\PYG{p}{):}
+            \PYG{n}{size} \PYG{o}{=} \PYG{n}{X}\PYG{p}{[}\PYG{n}{j}\PYG{p}{,}\PYG{n}{j}\PYG{p}{]}\PYG{o}{.}\PYG{n}{shape}
+            \PYG{k}{if} \PYG{n}{size} \PYG{o}{==} \PYG{p}{():}
+                \PYG{n}{size} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}
+                \PYG{c+c1}{\PYGZsh{} T is the ixi , i = 1,...,n matrix that we will compute its}
+                \PYG{c+c1}{\PYGZsh{} minor determinant}
+            \PYG{n}{T} \PYG{o}{=} \PYG{p}{(}\PYG{n}{X}\PYG{p}{[}\PYG{n}{j}\PYG{p}{,}\PYG{n}{j}\PYG{p}{])}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{n}{size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]))}
+            \PYG{k}{if}\PYG{p}{(}\PYG{n}{la}\PYG{o}{.}\PYG{n}{det}\PYG{p}{(}\PYG{n}{T}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{n}{tol}\PYG{p}{):}
+                \PYG{n}{count}\PYG{o}{+=}\PYG{l+m+mi}{1}
+        \PYG{c+c1}{\PYGZsh{} if all minor determinants are positive, then X matrix is positive definite}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n}{count} \PYG{o}{==} \PYG{n}{n\PYGZus{}of\PYGZus{}pos}\PYG{p}{):}
+                \PYG{k}{return} \PYG{n+nb+bp}{True}
+        \PYG{k}{return} \PYG{n+nb+bp}{False}
+\end{Verbatim}

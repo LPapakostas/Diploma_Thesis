@@ -1,0 +1,86 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{numpy} \PYG{k+kn}{import} \PYG{n}{linalg} \PYG{k}{as} \PYG{n}{la}
+\PYG{k+kn}{import} \PYG{n+nn}{preproc} \PYG{k+kn}{as} \PYG{n+nn}{prc}
+\PYG{k+kn}{from} \PYG{n+nn}{deflational\PYGZus{}method} \PYG{k+kn}{import} \PYG{n}{ica\PYGZus{}def}
+\PYG{k+kn}{from} \PYG{n+nn}{symmetric\PYGZus{}method}  \PYG{k+kn}{import} \PYG{n}{ica\PYGZus{}sym}
+
+\PYG{k}{def} \PYG{n+nf}{fastica}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{o}{=}\PYG{n+nb+bp}{None}\PYG{p}{,}\PYG{n}{algorithm} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}deflation\PYGZsq{}}\PYG{p}{,}\PYG{n}{whiten}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,}\PYG{n}{fc} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}exp\PYGZsq{}}\PYG{p}{,}\PYG{n}{alpha} \PYG{o}{=} \PYG{l+m+mf}{1.0}\PYG{p}{,}
+            \PYG{n}{max\PYGZus{}it} \PYG{o}{=} \PYG{l+m+mi}{10000}\PYG{p}{,}\PYG{n}{tol} \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{o}{**\PYGZhy{}}\PYG{l+m+mi}{6}\PYG{p}{,}\PYG{n}{w\PYGZus{}init} \PYG{o}{=} \PYG{n+nb+bp}{None}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    PARAMETERS:}
+\PYG{l+s+sd}{    X ( array p,n) : contains the observations measured on p variables}
+\PYG{l+s+sd}{    OPTIONAL:}
+\PYG{l+s+sd}{    n\PYGZus{}comp (int) : number of components to extract}
+\PYG{l+s+sd}{    algorithm(string \PYGZsq{}symmetric\PYGZsq{} or \PYGZsq{}deflational\PYGZsq{}) : FastICA solving method}
+\PYG{l+s+sd}{    whiten (bool) : do data whitening .If False , we assume that the data is already whiten }
+\PYG{l+s+sd}{    fc ( string \PYGZsq{}logcosh\PYGZsq{}/\PYGZsq{}exp\PYGZsq{}/\PYGZsq{}cube\PYGZsq{}) : form of G function for comuting the negentropy}
+\PYG{l+s+sd}{    alpha (float) : only use for fc = \PYGZsq{}logcosh\PYGZsq{} . Default is 1.0}
+\PYG{l+s+sd}{    max\PYGZus{}it(int) : maximum iteration number}
+\PYG{l+s+sd}{    tol(float) : tolerance which the um\PYGZhy{}mixing matrix is considered that has converged}
+\PYG{l+s+sd}{    w\PYGZus{}init ( array n\PYGZus{}comp,n\PYGZus{}comp) : initial values for un\PYGZhy{}mixing array}
+
+\PYG{l+s+sd}{    OUTPOUTS:}
+\PYG{l+s+sd}{    K(array n\PYGZus{}comp,p): pre\PYGZhy{}whitening matrix}
+\PYG{l+s+sd}{    W(array n\PYGZus{}comp,n\PYGZus{}comp): estimated un\PYGZhy{}mixing matrix}
+\PYG{l+s+sd}{    S(array p,n): estimated source signal matrix}
+
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{alpha} \PYG{o}{\PYGZlt{}} \PYG{l+m+mf}{1.0}\PYG{p}{)} \PYG{o+ow}{or} \PYG{p}{(}\PYG{n}{alpha} \PYG{o}{\PYGZgt{}} \PYG{l+m+mf}{2.0}\PYG{p}{)} \PYG{p}{:}
+        \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}alpha must be in [1,2]\PYGZdq{}}\PYG{p}{)}
+    
+    \PYG{k}{if} \PYG{n+nb}{type}\PYG{p}{(}\PYG{n}{fc}\PYG{p}{)} \PYG{o+ow}{is} \PYG{n+nb}{str}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{fc} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}logcosh\PYGZsq{}}\PYG{p}{:}
+            \PYG{k}{def} \PYG{n+nf}{g}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{):}
+                \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{tanh}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+            \PYG{k}{def} \PYG{n+nf}{gdot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{):}
+                \PYG{k}{return} \PYG{n}{alpha}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{tanh}\PYG{p}{(}\PYG{n}{x}\PYG{p}{))}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{k}{elif} \PYG{n}{fc} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}exp\PYGZsq{}}\PYG{p}{:}
+            \PYG{k}{def} \PYG{n+nf}{g}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{):}
+                \PYG{k}{return} \PYG{n}{x}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}
+            \PYG{k}{def} \PYG{n+nf}{gdot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{):}
+                \PYG{k}{return} \PYG{n}{np}\PYG{o}{.}\PYG{n}{exp}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{o}{*}\PYG{p}{(}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{))}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{\PYGZhy{}}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{k}{elif} \PYG{n}{fc} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}cube\PYGZsq{}}\PYG{p}{:}
+            \PYG{k}{def} \PYG{n+nf}{g}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{):}
+                \PYG{k}{return} \PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{3}
+            \PYG{k}{def} \PYG{n+nf}{gdot}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{):}
+                \PYG{k}{return} \PYG{l+m+mi}{3}\PYG{o}{*}\PYG{n}{x}\PYG{o}{**}\PYG{l+m+mi}{2}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Function does not included.\PYGZdq{}}\PYG{p}{)}
+        
+    \PYG{n}{sensors}\PYG{p}{,}\PYG{n}{samples} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}
+
+    \PYG{k}{if} \PYG{n}{n\PYGZus{}comp} \PYG{o+ow}{is} \PYG{n+nb+bp}{None} \PYG{p}{:}
+        \PYG{n}{n\PYGZus{}comp} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{sensors}\PYG{p}{,}\PYG{n}{samples}\PYG{p}{))}
+    \PYG{k}{elif} \PYG{p}{(}\PYG{n}{n\PYGZus{}comp} \PYG{o}{\PYGZgt{}} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{sensors}\PYG{p}{,}\PYG{n}{samples}\PYG{p}{)):}
+        \PYG{n}{n\PYGZus{}comp} \PYG{o}{=} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{sensors}\PYG{p}{,}\PYG{n}{samples}\PYG{p}{)}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Components to large.It was set\PYGZdq{}}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{)}
+
+    \PYG{k}{if} \PYG{n}{whiten} \PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Centering the columns / variables}
+        \PYG{n}{X} \PYG{o}{=} \PYG{n}{prc}\PYG{o}{.}\PYG{n}{mean\PYGZus{}remove}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{sensors}\PYG{p}{,}\PYG{n}{samples}\PYG{p}{)}
+        \PYG{c+c1}{\PYGZsh{} Do the PCA algorithm and then the data whitening}
+        \PYG{n}{eig}\PYG{p}{,}\PYG{n}{e} \PYG{o}{=} \PYG{n}{prc}\PYG{o}{.}\PYG{n}{pca\PYGZus{}eig}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{)}
+        \PYG{n}{Z}\PYG{p}{,}\PYG{n}{K} \PYG{o}{=} \PYG{n}{prc}\PYG{o}{.}\PYG{n}{data\PYGZus{}whitening}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{eig}\PYG{p}{,}\PYG{n}{e}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{n}{Z} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{copy}\PYG{p}{()}
+        \PYG{n}{K} \PYG{o}{=} \PYG{n+nb+bp}{None}
+    
+    \PYG{k}{if} \PYG{n}{w\PYGZus{}init} \PYG{o+ow}{is} \PYG{n+nb+bp}{None}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Choose random initial values }
+        \PYG{c+c1}{\PYGZsh{} ||w|| must be 1}
+        \PYG{n}{w\PYGZus{}init} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{random}\PYG{o}{.}\PYG{n}{normal}\PYG{p}{(}\PYG{n}{size} \PYG{o}{=} \PYG{p}{(}\PYG{n}{n\PYGZus{}comp}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{))}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{n}{w\PYGZus{}init} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{asarray}\PYG{p}{(}\PYG{n}{w\PYGZus{}init}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{w\PYGZus{}init}\PYG{o}{.}\PYG{n}{shape} \PYG{o}{!=} \PYG{p}{(}\PYG{n}{n\PYGZus{}comp}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{):}
+            \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Wrong Shape. The correct dimensions are\PYGZdq{}}\PYG{p}{,(}\PYG{n}{n\PYGZus{}comp}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{))}
+  
+    \PYG{k}{if} \PYG{n}{algorithm} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}symmetric\PYGZsq{}}\PYG{p}{:}
+        \PYG{n}{W} \PYG{o}{=} \PYG{n}{ica\PYGZus{}sym}\PYG{p}{(}\PYG{n}{Z}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{,}\PYG{n}{max\PYGZus{}it}\PYG{p}{,}\PYG{n}{tol}\PYG{p}{,}\PYG{n}{g}\PYG{p}{,}\PYG{n}{gdot}\PYG{p}{,}\PYG{n}{w\PYGZus{}init}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{)}
+    \PYG{k}{elif} \PYG{n}{algorithm} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}deflation\PYGZsq{}}\PYG{p}{:}
+        \PYG{n}{W} \PYG{o}{=} \PYG{n}{ica\PYGZus{}def}\PYG{p}{(}\PYG{n}{Z}\PYG{p}{,}\PYG{n}{n\PYGZus{}comp}\PYG{p}{,}\PYG{n}{max\PYGZus{}it}\PYG{p}{,}\PYG{n}{tol}\PYG{p}{,}\PYG{n}{g}\PYG{p}{,}\PYG{n}{gdot}\PYG{p}{,}\PYG{n}{w\PYGZus{}init}\PYG{p}{,}\PYG{n}{alpha}\PYG{p}{)}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Wrong Argument\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{S\PYGZus{}e} \PYG{o}{=} \PYG{n}{W}\PYG{err}{@}\PYG{p}{(}\PYG{n}{K}\PYG{n+nd}{@X}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{K}\PYG{p}{,}\PYG{n}{W}\PYG{p}{,}\PYG{n}{S\PYGZus{}e}\PYG{p}{,}\PYG{n}{Z}
+\end{Verbatim}

@@ -1,0 +1,67 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{from} \PYG{n+nn}{scipy} \PYG{k+kn}{import} \PYG{n}{linalg} \PYG{k}{as} \PYG{n}{la}
+
+\PYG{k}{def} \PYG{n+nf}{mean\PYGZus{}remove}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{rows}\PYG{p}{,}\PYG{n}{cols}\PYG{p}{):} 
+    \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    PARAMETERS:}
+\PYG{l+s+sd}{    X(array rows,cols):array that needs its mean value removed from all observations}
+\PYG{l+s+sd}{    OUTPUTS:}
+\PYG{l+s+sd}{    X\PYGZus{}tilde (array rows,cols):array with zero mean }
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{p}\PYG{p}{,}\PYG{n}{n} \PYG{o}{=} \PYG{n}{rows}\PYG{p}{,}\PYG{n}{cols}
+    \PYG{c+c1}{\PYGZsh{} We compute the mean value of the columns of X array and }
+    \PYG{c+c1}{\PYGZsh{} reshape in a px1 array (p = number of different signals)}
+    \PYG{n}{mx} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{n}{p}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{c+c1}{\PYGZsh{} remove the mean matrix(px1) from the signals }
+    \PYG{n}{X\PYGZus{}tilde} \PYG{o}{=} \PYG{n}{X} \PYG{o}{\PYGZhy{}} \PYG{n}{mx}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{ones}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)))}
+    
+    \PYG{c+c1}{\PYGZsh{} Check if mean of X\PYGZus{}tilde is close to zero}
+    \PYG{n}{mxt} \PYG{o}{=} \PYG{n}{X\PYGZus{}tilde}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{.}\PYG{n}{reshape}\PYG{p}{((}\PYG{n}{p}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{))}
+    \PYG{k}{if} \PYG{n}{np}\PYG{o}{.}\PYG{n}{all}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{abs}\PYG{p}{(}\PYG{n}{mxt}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{10}\PYG{o}{**}\PYG{p}{(}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{7}\PYG{p}{)):}
+        \PYG{k}{raise} \PYG{n+ne}{ValueError}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Mean remove has failed\PYGZdq{}}\PYG{p}{)}
+    
+    \PYG{k}{return} \PYG{n}{X\PYGZus{}tilde}
+
+\PYG{k}{def} \PYG{n+nf}{pca\PYGZus{}eig}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{comp}\PYG{p}{):}
+    \PYG{n}{p}\PYG{p}{,}\PYG{n}{n} \PYG{o}{=} \PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}
+    \PYG{k}{if}\PYG{p}{(}\PYG{n}{comp} \PYG{o}{\PYGZgt{}} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{)):}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}Principal components must be less than signals\PYGZdq{}}\PYG{p}{)}
+        \PYG{n}{comp} \PYG{o}{=} \PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{X}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} Compute the covariance matrix of X }
+    \PYG{n}{Cx} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cov}\PYG{p}{(}\PYG{n}{X}\PYG{p}{)} 
+    \PYG{c+c1}{\PYGZsh{} e is the eigvector matrix where i\PYGZhy{}th column}
+    \PYG{c+c1}{\PYGZsh{} responds to i\PYGZhy{}th eigvalue}
+    \PYG{n}{e}\PYG{p}{,}\PYG{n}{V} \PYG{o}{=} \PYG{n}{la}\PYG{o}{.}\PYG{n}{eig}\PYG{p}{(}\PYG{n}{Cx}\PYG{p}{)} 
+    \PYG{c+c1}{\PYGZsh{} returns index sort in ascending order and reverse it}
+    \PYG{n}{eig\PYGZus{}sort} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{e}\PYG{p}{)[::}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{} re\PYGZhy{}arrange the vectors in the correct order}
+    \PYG{n}{e}\PYG{p}{,}\PYG{n}{V} \PYG{o}{=} \PYG{n}{e}\PYG{p}{[}\PYG{n}{eig\PYGZus{}sort}\PYG{p}{]} \PYG{p}{,} \PYG{n}{V}\PYG{p}{[:,}\PYG{n}{eig\PYGZus{}sort}\PYG{p}{]}
+    \PYG{c+c1}{\PYGZsh{} keep the N first eigvalues and eigvectors as given by components}
+    \PYG{n}{e}\PYG{p}{,}\PYG{n}{V} \PYG{o}{=} \PYG{n}{e}\PYG{p}{[:}\PYG{n}{comp}\PYG{p}{]} \PYG{p}{,} \PYG{n}{V}\PYG{p}{[:,:}\PYG{n}{comp}\PYG{p}{]}
+    \PYG{k}{return} \PYG{n}{e}\PYG{p}{,}\PYG{n}{V}
+
+\PYG{k}{def} \PYG{n+nf}{data\PYGZus{}whitening}\PYG{p}{(}\PYG{n}{X}\PYG{p}{,}\PYG{n}{e}\PYG{p}{,}\PYG{n}{V}\PYG{p}{):}
+    \PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    PARAMETERS:}
+\PYG{l+s+sd}{    X(array p,n): array that will be whiten}
+\PYG{l+s+sd}{    e(array p,1): eigvalues of X array that are sorted in descending order}
+\PYG{l+s+sd}{    V(array p,p): matrix that consists the right eigvectors that corresponds }
+\PYG{l+s+sd}{                  on each eigvalue}
+\PYG{l+s+sd}{    OUTPOUTS:}
+\PYG{l+s+sd}{    Z(array p,n): array that has whitened}
+\PYG{l+s+sd}{    A(array p,p): whiten trasformation matrix}
+\PYG{l+s+sd}{    }
+\PYG{l+s+sd}{    NOTES:}
+\PYG{l+s+sd}{    1) The white trasformation is reversible}
+\PYG{l+s+sd}{    2) Must perform after PCA algorithm}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{c+c1}{\PYGZsh{} Compute D\PYGZca{}(\PYGZhy{}1/2) matrix (D= diag(d1,..,dp))}
+    \PYG{n}{D} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{diag}\PYG{p}{(}\PYG{l+m+mf}{1.}\PYG{o}{/}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{e}\PYG{p}{))}
+    \PYG{n}{A} \PYG{o}{=} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{V}\PYG{n+nd}{@D}\PYG{p}{))}\PYG{o}{.}\PYG{n}{T}
+    \PYG{c+c1}{\PYGZsh{} A = D\PYGZca{}(\PYGZhy{}1/2)*V.T}
+    \PYG{c+c1}{\PYGZsh{}print((V@D).T \PYGZhy{} D@V.T)}
+    \PYG{c+c1}{\PYGZsh{}A = np.real(D@V.T)}
+    \PYG{n}{Z} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{real}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{dot}\PYG{p}{(}\PYG{n}{A}\PYG{p}{,}\PYG{n}{X}\PYG{p}{))}
+    \PYG{k}{return} \PYG{n}{Z}\PYG{p}{,}\PYG{n}{A}
+\end{Verbatim}

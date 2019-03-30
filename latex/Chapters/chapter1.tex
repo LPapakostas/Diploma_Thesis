@@ -1,0 +1,266 @@
+\section{Γραμμική Άλγεβρα} \label{sec:1.1}
+\justifying
+Σε αυτή την ενότητα θα παρουσιάσουμε μερικούς ορισμούς και θεωρήματα \cite{Strang:1},\cite{Meyer:2} από την Γραμμική Άλγεβρα, που θα μας βοηθήσουν στην κατανόηση και την ανάλυση των μεθόδων που θα χρησιμοποιήσουμε παρακάτω.
+\begin{definition} \label{def:1.1}
+Ένας τετραγωνικός πίνακας \en $\mathbf{A} \in \mathbb{R}^{n \times n}$ \gr ονομάζεται \emph{συμμετρικός} όταν \en $\mathbf{A} = \mathbf{A}^T$.
+\end{definition}
+\gr
+\begin{theorem} \label{th:1.1}
+Ένας συμμετρικός πίνακας έχει πάντα πραγματικές ιδιοτιμές.
+\end{theorem}
+\begin{theorem} \label{th:1.2}
+Ένας συμμετρικός πίνακας έχει πάντα \en $n$ \gr γραμμικώς ανεξάρτητα ιδιοδιανύσματα, άρα μπορεί να διαγωνοποιηθεί. 
+\end{theorem}
+\begin{theorem} \label{th:1.3}
+Τα ιδιοδιανύσματα ενός συμμετρικού πίνακα είναι δυνατόν να επιλεγούν κάθετα μεταξύ τους. 
+\end{theorem}
+\begin{definition} \label{def:1.2}
+Ένας συμμετρικός πίνακας \en $\mathbf{A}\in \mathbf{R}^{n \times n}$ \gr ονομάζεται \emph{ορθογώνιος} όταν \en $\mathbf{A} \mathbf{A}^T = \mathbb{I}$ \gr και \en $\mathbf{A}^T = \mathbf{A}^{-1}$.
+\end{definition}
+\begin{definition} \label{def:1.3}
+Τα διανύσματα \en $q_1, \ldots, q_k$ \gr είναι \emph{ορθοκανονικά} όταν: \en
+    \begin{align*}
+        q_i^T q_j = \begin{cases}
+        & 0 \quad \text{\gr όταν \en} i \neq j, \text{\gr που δίνει την ορθογωνιότητα \en} \\
+        & 1 \quad  \text{\gr όταν \en} i = j, \text{\gr που δίνει την κανονικότητα \en}
+        \end{cases}
+    \end{align*}
+\end{definition}
+\gr
+\begin{theorem} \label{th:1.4} 
+Έστω ένας πίνακας \en $\mathbf{A} \in \mathbb{R}^{n\times n}$, \gr με ιδιοτιμές \en $\lambda_1, \lambda_2, \ldots, \lambda_n$ \gr και \en $v_1, v_2, \ldots, v_n $ \gr τα αντίστοιχα ιδιοδιανύσματα. 'Εαν \en$\mathbf{V}$ \gr ο πίνακας που περιέχει ως στήλες τα ιδιοδιανύσματα του πίνακα \en $ \mathbf{A}$ \gr και \en $\mathbf{D} = diag(\lambda_1, \lambda_2, \ldots, \lambda_n) $ \gr ο διαγώνιος πίνακας των ιδιοτιμών κατα αντιστοιχία, τότε ο πίνακας \en $\mathbf{A}$ \gr μπορεί να γραφεί ως:\en
+\begin{align*}
+    \mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V}^{-1}
+\end{align*}
+\end{theorem}
+\gr
+\begin{proposition}\label{prop:1.1}
+Εάν ο πίνακας \en $\mathbf{A}$ \gr είναι συμμετρικός, σύμφωνα με το Θεώρημα \ref{th:1.3}, τότε ο πίνακας \en $\mathbf{V}$ \gr είναι ορθογώνιος. Άρα ο πίνακας \en $\mathbf{A}$ \gr μπορεί να γραφεί:
+\begin{align*}
+    \mathbf{A} = \mathbf{V} \mathbf{D} \mathbf{V}^T
+\end{align*}
+\end{proposition}
+\begin{definition}\label{def:1.4}
+Ένας συμμετρικός πίνακας \en $\mathbf{A} \in \mathbb{R}^{n \times n}$\gr ονομάζεται \emph{θετικά ορισμένος} όταν όλες οι ιδιοτιμές του είναι θετικές.
+\end{definition}
+\begin{definition} \label{def:1.5}
+Ένας συμμετρικός πίνακας \en $\mathbf{A} \in \mathbb{R}^{n \times n}$\gr ονομάζεται \emph{θετικά ημι-ορισμένος} όταν όλες οι ιδιοτιμές του είναι μη αρνητικές.
+\end{definition}
+\begin{theorem} \label{th:1.5} [Κριτήριο \en Sylvester]
+\gr Αναγκαία και ικανή συνθήκη για να είναι ένας τετραγωνικός πίνακας \en $\mathbf{A}$ \gr θετικά ορισμένος εάν για τις ακόλουθες διαδοχικές ορίζουσες ισχύει ότι: \en
+\begin{align*}
+    D_{1} = \alpha_{11} > 0, 
+    D_{2} = \begin{vmatrix}
+    \alpha_{11} & \alpha_{12} \\
+    \alpha_{21} & \alpha_{22}
+    \end{vmatrix} > 0 , 
+    D_{3} = \begin{vmatrix}
+    \alpha_{11} & \alpha_{12} & \alpha_{13} \\
+    \alpha_{21} & \alpha_{22} & \alpha_{23} \\
+    \alpha_{31} & \alpha_{32} & \alpha_{33}
+    \end{vmatrix} > 0, \ldots, D_{n} = |\mathbf{A}| > 0 
+\end{align*}
+\gr Αντίστοιχα, για να είναι θετικά ημι-ορισμένος θα πρέπει οι ακόλουθες διαδοχικές ορίζουσες να είναι μεγαλύτερες ή ίσες του μηδενός. 
+\end{theorem}
+\begin{definition} \label{def:1.6}
+Μια τιμή \en $\lambda \in \mathbb{R}$ \gr και ένα διάνυσμα \en $x \in \mathbb{R}^{n \times 1}$ \gr ονομάζεται \emph{γενικευμένη ιδιοτιμή} και \emph{γενικευμένο ιδιοδιάνυσμα} ενός ζεύγους τετραγωνικών πινάκων \en ($\mathbf{A},\mathbf{B}) \quad \mathbf{A},\mathbf{B} \in \mathbf{R}^{n \times n}$ \gr, όπου ικανοποιούν την σχέση \en $\mathbf{A}x = \lambda \mathbf{B} x$. Το αντίστοιχο πρόβλημα εύρεσης των παραπάνω ποσοτήτων ονομάζεται \emph{Πρόβλημα Γενικευμένων Ιδιοτιμών} \en (General Eigenvalue Problem). \gr
+\end{definition}
+\begin{definition} \label{def:1.7}
+Το γενικευμένο κλάσμα \en Rayleigh \gr ενός ζεύγους τετραγωνικών πινάκων \en ($\mathbf{A},\mathbf{B}$) ορίζεται: \en
+\begin{align*}
+    \mathbf{R} \left( \mathbf{A},\mathbf{B},w \right) = \frac{x^T \mathbf{A} x}{ x^T \mathbf{B} x}
+\end{align*}
+\end{definition}
+\gr
+\begin{theorem}\label{th:1.6} [Aρχή \en Rayleigh-Ritz]
+Έστω \en $\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_n$ \gr οι γενικευμένες ιδιοτιμές του ζεύγους \en ($\mathbf{A},\mathbf{B}$) \gr και \en $v_1, v_2, \ldots, v_n$ \gr τα αντίστοιχα γενικευμένα ιδιοδιανύσματα. Τότε ισχύει:\en
+\begin{align*}
+    \min_{x} \left\{ \mathbf{R}(\mathbf{A},\mathbf{B},x) \right\} = \mathbf{R}(\mathbf{A},\mathbf{B},v_1) = \lambda_1 \\
+    \max_{x} \left\{ \mathbf{R}(\mathbf{A},\mathbf{B},x) \right\} = \mathbf{R}(\mathbf{A},\mathbf{B},v_n) = \lambda_n
+\end{align*}
+\end{theorem}
+\gr
+\begin{proposition} \label{prop:1.2}
+Έστω ένας αντιστρέψιμος πίνακας \en $\mathbf{Q} \in \mathbf{R}^{n \times n}$,\gr όπου \en $\mathbf{A} \in \mathbb{R}^{n \times n}$ \gr ένας συμμετρικός πίνακας και \en $\mathbf{B} \in \mathbb{R}^{n \times n}$\gr ένας θετικά ορισμένος πίνακας. Τότε: \en
+\begin{align*}
+    \mathbf{R} (\mathbf{Q}^T \mathbf{A} \mathbf{Q},\mathbf{Q}^T \mathbf{B} \mathbf{Q},x) = \mathbf{R} (\mathbf{A},\mathbf{B},\mathbf{Q}x)
+\end{align*}
+\end{proposition}
+\gr
+\begin{proposition} \label{prop:1.3}
+Όταν πολλαπλασιάζουμε το ζεύγος πινάκων με τους αριθμούς \en $a,b \in \mathbb{R}$ \gr αντίστοιχα, τότε το κλάσμα \en Rayleigh \gr γίνεται: \en
+\begin{align*}
+   \mathbf{R}(a\mathbf{A},b\mathbf{B},x) = \frac{a}{b}  \mathbf{R}(\mathbf{A},\mathbf{B},x)
+\end{align*}
+\end{proposition}
+\section{Πιθανότητες και Τυχαία Σήματα} \label{sec:1.2}
+\justifying
+Παραθέτουμε τους ακόλουθους ορισμούς \cite{prob:15} ώστε να κάνουμε καλύτερη την κατανόηση των μεθόδων. Για τους ορισμούς, υποθέτουμε τυχαία μεταβλητή \en $x$ \gr με συνάρτηση κατανομής \en $F_x(x_i) = P\{x \leq x_i \}$ \gr και συνάρτηση πυκνότητας πιθανότητας \en $f_x(x) = \frac{\mathrm{d} F_x }{\mathrm{d} x} $ \gr.
+\begin{definition} \label{def:1.8}
+Η \emph{μέση τιμή} ή \emph{αναμενόμενη τιμή} μιας οποιαδήποτε συνάρτησης \en $g(x)$ \gr της τυχαίας μεταβλητής \en $x$ \gr είναι:
+\begin{align*}
+    E\{g(x)\} = \int\limits_{-\infty}^{\infty} g(x)f_x(x) \mathrm{d}x
+\end{align*}
+\end{definition}
+\begin{proposition} \label{prop:1.4}
+Εάν \en $a,b \in \mathbf{R}$ \gr, τότε: $E\{ax+b\} = aE\{x\}+b$
+\end{proposition}
+Στην πράξη όμως, επειδή δεν γνωρίζουμε την συνάρτηση πυκνότητας πιθανότητας της \en $x$, \gr υπολογίζουμε τον αντίστοιχο \emph{δειγματικό μέσο όρο}: \en
+\begin{align*}
+    E \{ g(x) \} = \frac{1}{m} \sum\limits_{i=1}^{m} g(x_i)
+\end{align*} \gr
+όπου \en $m$ \gr οι παρατηρήσεις της μεταβλητής \en $x$. \gr
+\begin{definition} \label{def:1.9}
+Η \emph{διασπορά} μιας τυχαίας μεταβλητής \en $x$ \gr ορίζεται ως: \en
+\begin{align*}
+    var(x) = E\{ (x-\mu)^2 \} = E\{x^2\} - \mu^2
+\end{align*} 
+όπου $μ$ η μέση τιμή της μεταβλητής \en $x$ \gr.
+\end{definition}
+\gr 
+\begin{proposition} \label{prop:1.5}
+Εάν \en $a,b \in \mathbb{R}$ \gr, τότε: $var(ax+b) = a^2 var(x)  $.
+\end{proposition}
+Η διασπορά αποτελεί ένα μέτρο της μεταβλητότητας μιας τυχαίας μεταβλητής ή του 'απλώματος' της κατανομής της. Με άλλα λόγια, μια κατανομή με μεγάλη διασπορά είναι 'απλωμένη', ενώ μια κατανομή με μικρή διασπορά είναι 'συγκεντρωμένη' γύρω από την μέση τιμή.
+\begin{definition} \label{def:1.10}
+Η τετραγωνική ρίζα της διασποράς ονομάζεται \emph{τυπική απόκλιση}. Δηλαδή: \en
+\begin{align*}
+    \sigma_x = \sqrt{var(x)}
+\end{align*}
+\end{definition}
+\gr
+\begin{definition} \label{def:1.11}
+Μια τυχαία μεταβλητή \en $x$ \gr ονομάζεται \emph{γκαουσιανή} όταν ακολουθεί την κατανομή: \en
+\begin{align*}
+    f_x(x) = \frac{1}{\sigma_x \sqrt{2 \pi}} \exp \left( - \frac{(x-\mu)^2} {2 \sigma_x^2} \right )
+\end{align*} \gr
+και συμβολίζεται ως \en $\mathcal{N}(\mu,\sigma_x)$. \gr Μια γκαουσιανή κατονομή ονομάζεται \emph{τυπική} όταν έχει $μ = 0$ και \en $\sigma_x = 1$. \gr
+\end{definition}
+Επιπλέον, υποθέτουμε \en $y$ \gr τυχαία μεταβλητή που έχει από κοινού συνάρτηση κατανομής \en $F_{xy}(x_i,y_i) = P\left(x \leq x_i,y \leq y_i \right)$ \gr και από κοινού συνάρτηση πυκνότητας πιθανότητας \en $f_{xy} = \frac{\partial^2 F_{xy}}{\partial x \partial y}  $ \gr.
+\begin{definition} \label{def:1.12}
+Η \emph{μέση} ή \emph{αναμενόμενη} τιμή μιας οποιαδήποτε  συνάρτησης \en $g(x,y)$ \gr των τυχαίων μεταβλητών \en $x,y$ \gr ορίζεται ως: \en
+\begin{align*}
+    E\{g(x,y)\} = \int\limits_{-\infty}^{\infty} \int\limits_{-\infty}^{\infty} g(x,y) f_{xy}(x,y) \mathrm{d}x \mathrm{d}y
+\end{align*} \gr
+\end{definition}
+\begin{definition} \label{def:1.13}
+Η \emph{συσχέτιση} δύο τυχαίων μεταβλητών ορίζεται ως: \en
+\begin{align*}
+    corr(x,y)=E\{x,y\} 
+\end{align*} 
+\end{definition}
+\gr
+\begin{definition} \label{def:1.14}
+Η \emph{συνδιασπορά} δύο τυχαίων μεταβλητών \en $x,y$ \gr ορίζεται ως: \en
+\begin{align*}
+    cov(x,y) = E\{ (x-\mu_x)(y-\mu_y)\} = corr(x,y) - \mu_x \mu_y
+\end{align*}
+\end{definition}
+% pinakes 
+\gr
+\begin{definition} \label{def:1.15}
+Οι τυχαίες μεταβλητές \en $x_1, x_2, \ldots, x_n$ \gr ονομάζονται \emph{στατιστικά ανεξάρτητες} όταν ισχύει:
+\begin{align*}
+    P(x_1,x_2,\ldots,x_n) = P(x_1) P(x_2) \ldots P(x_n)
+\end{align*}
+\end{definition}
+Οι παραπάνω ορισμοί μπορούν να επεκταθούν και για τυχαία σήματα \cite{prob:16}. Όπως γνωρίζουμε, τα τυχαία σήματα απαρτίζονται από ακολουθίες τυχαίων μεταβλητών. Στους ακόλουθους ορισμούς θα χρησιμοποιήσουμε τους πίνακες που περιέχουν τυχαία σήματα \en $\mathbf{X}(t)$ \gr και \en $\mathbf{Y}(t)$ \gr. 
+\begin{definition} \label{def:1.16}
+Ο πίνακας \emph{αυτοσυσχέτισης} \en $\mathbf{R}_{XX}$ \gr ορίζεται ως: \en
+\begin{align*}
+    \mathbf{R}_{XX}(\tau) = E\left\{\mathbf{X}(t) \mathbf{X}^T(t+\tau) \right\}
+\end{align*}
+\en ενώ ο πίνακας \emph{ετεροσυσχέτισης} \en $\mathbf{R}_{XY} $ \gr ως:
+\begin{align*}
+    \mathbf{R}_{XY}(\tau) = E\left\{\mathbf{X}(t) \mathbf{Y}^T(t+\tau) \right\}
+\end{align*}
+\gr όπου $τ$ η χρονική μετατόπιση κάθε σήματος.
+\end{definition}
+\begin{proposition} \label{prop:1.6}
+Για χρονική καθυστέρηση $τ=0$, ο πίνακας αυτοσυσχέτισης αναπαριστά την μέση τετραγωνική ισχύς του τυχαίου σήματος. Δηλαδή:
+\begin{align*}
+    \mathbf{R}_{XX}(0) = E\left \{ X^2(t) \right \}
+\end{align*}
+\end{proposition}
+\begin{definition} \label{def:1.17}
+Ο πίνακας \emph{συνδιασποράς} \en $\mathbf{C}_{X}$ \gr ορίζεται ως: \en
+\begin{align*}
+    \mathbf{C}_{X} = E\left \{ (\mathbf{X} - \mu_{X}) (\mathbf{X} - \mu_{X})^T \right \}
+\end{align*}
+\gr όπου \en $\mu_X$ \gr ο μέσος όρος του πίνακα \en $\mathbf{X} $. \gr
+\end{definition}
+\section{\en Principal Component Analysis - PCA} \label{sec:1.4}
+\justifying
+\gr Η κεντρική ιδέα της ανάλυσης κυρίων συνιστωσών (\en PCA)\cite{pca:3} \gr είναι να μειώσει τις διαστάσεις ενός συνόλου δεδομένων, το οποίο περιέχει ένα μεγάλο αριθμό από συσχετισμένες μεταβλητές, διατηρώντας όσο το δυνατό την ίδια πληροφορία με το αρχικό σύνολο δεδομένων. Το παραπάνω αποτέλεσμα επιτυγχάνεται με τον μετασχηματισμό των αρχικών δεδομένων σε ένα νέο σύνολο μεταβλητών, τις κύριες συνιστώσες (\en PC). \gr Οι κύριες συνιστώσες είναι μεταξύ τους ασυσχέτιστες και είναι διατεταγμένες με τέτοιο τρόπο ώστε οι πρώτες κατά σειρά από αυτές να περιέχουν την περισσότερη πληροφορία που υπάρχει στο αρχικό σετ δεδομένων.
+\\[0.5\baselineskip]
+Υποθέτουμε τυχαίες μεταβλητές 
+\en $x =\begin{bmatrix} x_1 & x_2 & \ldots & x_n \end{bmatrix}$\gr , των οποίων μας ενδιαφέρουν οι διασπορές και οι συνδιασπορές τους και θέλουμε να εξάγουμε έναν αριθμό τυχαίων μεταβλητών \en $p << n $ \gr που να περιέχουν την μέγιστη δυνατή πληροφορία όσο αφορά τις διασπορές και συνδιασπορές τους.
+\\[0.5\baselineskip]
+Ψάχνουμε έναν γραμμικό συνδυασμό των \en$n$ \gr τυχαίων μεταβλητών \en$y = w^T x, w \in \mathbb{R}^{n \times 1}$ \gr τέτοιων ώστε να μεγιστοποιείται η διασπορά του, 
+\en$Var(y) = Var(w^T x) = w^T \mathbf{C}_x w^T$ \gr όπου \en $\mathbf{C}_x \in \mathbb{R}^{n \times n}$ \gr ο πίνακας συνδιασπορών του διανύσματος \en $x$. 
+\\ \gr
+Περιορίζοντας το μέτρο του \en $w$ \gr να είναι ίσο με την μονάδα, το πρόβλημά μπορεί να γραφτεί ως:\en
+\begin{align*}
+    \max_{w w^T = 1} \left( w^T \mathbf{C}_x w \right)
+\end{align*}
+\\
+Χρησιμοποιώντας την μέθοδο των Λαγκρανζιανών πολλαπλασιαστών \cite{langrage:4}, η σχέση προς μεγιστοποίηση είναι: \en
+\begin{align} \label{eq:1.2.1}
+w^T \mathbf{C}_x w - \lambda \left ( w^T w -1 \right ) = 0
+\end{align}
+\gr όπου $λ$ ο πολλαπλασιαστής \en Langrange. \gr 
+\\
+Παραγωγίζοντας ως προς \en $w_1$ \gr την σχέση \eqref{eq:1.2.1}, έχουμε: \en
+\begin{align} \label{eq:1.2.2}
+    \mathbf{C}_x w - \lambda w = 0 \Leftrightarrow 
+    \left ( \mathbf{C}_x - \lambda \mathbb{I}_n \right ) w = 0
+\end{align} \gr
+Η εξίσωση \eqref{eq:1.2.2} αποτελεί λύση του προβλήματος ιδιοτιμών. Οπότε, το $λ$ αποτελεί μια ιδιοτιμή του πίνακα \en $\mathbf{C}_x$ \gr και \en $w$ \gr το αντίστοιχο ιδιοδιάνυσμα. Έστω \en$w_1$ \gr ένα ιδιοδιάνυσμα που μεγιστοποιεί την την διασπορά της \en$y_1 = w_1^T x$. Για να βρούμε ποια από τις \en $n$ \gr ιδιοτιμές μεγιστοποιεί την \en $y_1$, \gr η ποσότητα προς μεγιστοποίηση είναι:
+\begin{align*}
+    w_1^T \mathbf{C}_x w_1 = w_1^T \lambda w_1 = \lambda w_1^T w_1 = \lambda 
+\end{align*}
+\gr με την τιμή του $λ$ να είναι όσο το δυνατόν μεγαλύτερη. Άρα, το ιδιοδιάνυσμα \en$w_1$ \gr αντιστοιχεί στην μεγαλύτερη ιδιοτιμή του πίνακα \en$\mathbf{C}_x$ \gr με $λ_1$ την μεγαλύτερη ιδιοτιμή.
+\\
+Αφού βρήκαμε το μέγιστο, θέλουμε στην συνέχεια να βρούμε εκείνο το συνδυασμό που μεγιστοποιεί την διασπορά της \en$y_2 = w_2^T x$ και ταυτόχρονα να είναι ασυσχέτιστο με το προηγούμενο, δηλαδή \en $Cov(y_1,y_2) = 0$. \gr Κατά τον ίδιο τρόπο, ψάχνουμε έναν 3ο  συνδυασμό που να μεγιστοποιεί την διασπορά και να είναι ασυσχέτιστο με τα 2 προηγούμενα κ.λ.π. 
+\\ [0.5\baselineskip]
+Αποδεικνύεται ότι τα ιδιοδιανύσματα που ψάχνουμε είναι \en$ w_1 , w_2 , \ldots , w_n$ \gr αντίστοιχα. Γενικά, η κ-οστή κύρια συνιστώσα των αρχικών τυχαίων μεταβλητών είναι η \en$y_\kappa = w_{\kappa}^T x$ \gr με διασπορά \en$Var(w_{\kappa}^T x) = \lambda_{\kappa}$ \gr , όπου $λ_κ$ η κ μεγαλύτερη ιδιοτιμή του πίνακα \en$\mathbf{C}_x$ και \en$w_{\kappa} $ το αντίστοιχο ιδιοδιάνυσμα. 
+\\[0.5\baselineskip]
+Μια μέθοδος για να βρούμε τις κύριες συνιστώσες είναι η παρακάτω:\\
+Σύμφωνα με το Θεώρημα \ref{th:1.4} και την Πρόταση \ref{prop:1.1}, ο πίνακας \en$\mathbf{C}_x$ \gr μπορεί να γραφεί στην μορφή \en$ \mathbf{C}_x = \mathbf{V} \mathbf{D} \mathbf{V}^T$, \gr όπου ο πίνακας \en $\mathbf{D}$ \gr πρέπει να έχει ως στοιχεία τις ιδιοτιμές του πίνακα \en $\mathbf{C}_x$ \gr κατά φθίνουσα σειρά, δηλαδή \en$\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_n$ \gr και ο πίνακας \en$\mathbf{V}$ \gr με τα αντίστοιχα ιδιοδιανύσματα να είναι ορθοκανονικός.
+\\
+Εάν \en$ y = \mathbf{W}^T x $, \gr τότε ο πίνακας συνδιασπορών θα είναι \en$\mathbf{C}_y = \mathbf{W}^T \mathbf{C}_x \mathbf{W}$ \gr και αν επιλέξουμε \en$\mathbf{W} = \mathbf{V}$ \gr έχουμε:\en
+\begin{align} \label{eq:1.2.3}
+    \mathbf{C}_y = \mathbf{W}^T \mathbf{C}_x \mathbf{W} = \mathbf{W}^T  \mathbf{V} &\mathbf{D} \mathbf{V}^T \mathbf{W} = \left ( \mathbf{V}^T  \mathbf{V} \right ) \mathbf{D} \left ( \mathbf{V}^T \mathbf{V} \right ) =
+    \mathbb{I}_n \mathbb{D} \mathbb{I}_n \Leftrightarrow \notag \\
+    &\mathbf{C}_y = \mathbf{D}
+\end{align}
+\gr Αφού επιλέξαμε τις ιδιοτιμές κατά φθίνουσα σειρά, η \en $y_1$ \gr έχει την μεγαλύτερη διασπορά και η \en $y_n$ \gr την μικρότερη. Μπορούμε να επιλέξουμε τις κύριες συνιστώσες που μας ενδιαφέρουν είτε κρατώντας τις \en $p < n$ \gr πρώτες ιδιοτιμές και τα αντίστοιχα ιδιοδιανύσματα, είτε τοποθετώντας ένα κατώφλι ως προς την διασπορά, απορίπτωντας συνιστώσες μικρότερες από το συγκεκριμένο κατώφλι. 
+\section{\en Data Whitening} \label{sec:1.5}
+\justifying
+Το \en \emph{whitening} \gr ή \en \emph{data whitening}\cite{whiten:5} \gr αποτελεί έναν γραμμικό μετασχηματισμό που μετατρέπει ένα διάνυσμα \en $x = \begin{bmatrix} x_1 & x_2 & \ldots & x_n \end{bmatrix} ^T$ \gr με μέση τιμή \en $ E{x} = m_x = \begin{bmatrix} m_1 & m_2 & \ldots & m_n \end{bmatrix}^T$ \gr και θετικά ορισμένο πίνακα διασποράς \en $ \mathbf{C}_x$ \gr σε ένα νέο διάνυσμα με ίδιες διαστάσεις: \en
+\begin{align*}
+    z = \begin{bmatrix} z_1 & z_2 & \ldots & z_n \end{bmatrix}^T = \mathbf{W} z
+\end{align*}
+\gr όπου ο πίνακας \en $\mathbf{W}$ \gr ονομάζεται \emph{πίνακας λεύκανσης}. Το νέο διάνυσμα θα έχει πίνακα διασπορών \en $ \mathbf{C}_z = \mathbb{I}_n$ \gr και τα δεδομένα που περιέχονται στο \en $z$ \gr θα είναι μεταξύ τους ασυσχέτιστα, άρα το διάνυσμα \en $z$ \gr θα είναι διάνυσμα λευκού θορύβου. Συνήθως, στον μετασχηματισμό αυτό, προηγείται μία αφαίρεση της μέσης τιμής από το διάνυσμα \en $x$ \gr ώστε το διάνυσμα \en $z$ \gr να έχει μηδενική μέση τιμή.
+\\ [0.5 \baselineskip]
+Στην συγκεκριμένη εργασία, θα χρησιμοποιήσουμε τον μετασχηματισμό \en PCA whitening, \gr καθώς συνδεέται με τον αλγόριθμο \en PCA \gr που αναφέραμε στο Κεφάλαιο \ref{sec:1.4}.
+\\
+Όπως γνωρίζουμε από την Πρόταση \ref{prop:1.1}, ο πίνακας \en $\mathbf{C}_x$ \gr μπορεί να γραφεί ως \en $\mathbf{C}_x = \mathbf{V} \mathbf{D} \mathbf{V}^T$, \gr όπου ο πίνακας \en $\mathbf{D}$ \gr περιέχει τις ιδιοτιμές του πίνακα \en $\mathbf{C}_x$ \gr κατά φθίνουσα σειρά και ο πίνακας \en $\mathbf{V}$ \gr τα αντίστοιχα ιδιοδιανύσματα. Ο πίνακάς λεύκανσης θα είναι: \en
+\begin{align} \label{eq:1.3.1}
+    \mathbf{W} = \mathbf{D}^{- \frac{1}{2}} \mathbf{V}^T
+\end{align}
+\gr Από την σχέση \eqref{eq:1.3.1}, βλέπουμε ότι ο πίνακας \en $\mathbf{C}_z$ \en είναι ίσος με τον μοναδιαίο: \en
+\begin{align*}
+&\mathbf{C}_z = \mathbf{W} \mathbf{C}_x \mathbf{W}^T = 
+\mathbf{D}^{- \frac{1}{2}} \mathbf{V}^T \mathbf{V} \mathbf{D} \mathbf{V}^T \left ( \mathbf{D}^{- \frac{1}{2}} \mathbf{V}^T  \right ) ^T = \\
+&=\mathbf{D}^{- \frac{1}{2}} \left ( \mathbf{V}^T \mathbf{V}  \right ) \mathbf{D} \left ( \mathbf{V}^T \mathbf{V} \right ) (\mathbf{D}^{- \frac{1}{2}})^T \\
+&= \mathbf{D}^{- \frac{1}{2}} \mathbb{I}_n \mathbf{D} \mathbb{I}_n \mathbf{D}^{- \frac{1}{2}} = \mathbf{D}^{- \frac{1}{2}} \mathbf{D} 
+\mathbf{D}^{- \frac{1}{2}} \\
+& = \left ( \mathbf{D}^{- \frac{1}{2}} \mathbf{D}^{\frac{1}{2}} \right ) \left ( \mathbf{D}^{\frac{1}{2}} \mathbf{D}^{- \frac{1}{2}} \right ) = \mathbb{I}_n \mathbb{I}_n = \mathbb{I}_n
+\end{align*} \gr
+και ότι ο πίνακας \en $\mathbf{W}$ \gr είναι ορθοκανονικός: \en
+\begin{align*}
+    \mathbf{C}_z = \mathbf{W} \mathbf{C}_x \mathbf{W}^T \Leftrightarrow \mathbb{I}_n = \mathbf{W} \mathbb{I}_n \mathbf{W}^T \Leftrightarrow \mathbf{W} \mathbf{W}^T = \mathbb{I}_n
+\end{align*}
+\gr Τέλος, ο μετασχηματισμός \en whitening, \gr όπως και ο \en PCA, \gr αποτελούν αντιστρέψιμους μετασχηματισμούς.
+% photo gia data whitening
